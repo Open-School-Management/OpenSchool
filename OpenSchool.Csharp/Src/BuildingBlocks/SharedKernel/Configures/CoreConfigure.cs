@@ -47,7 +47,7 @@ public static partial class ConfigureExtension
 
 
     public static IServiceCollection AddCoreAuthentication(this IServiceCollection services,
-        IConfiguration Configuration)
+        IConfiguration configuration)
     {
         services.AddAuthentication(authOptions =>
         {
@@ -59,12 +59,12 @@ public static partial class ConfigureExtension
             jwtOptions.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateAudience = true,
-                ValidAudience = Configuration["Auth:JwtSettings:Issuer"],
+                ValidAudience = configuration["Auth:JwtSettings:Issuer"],
                 ValidateIssuer = true,
-                ValidIssuer = Configuration["Auth:JwtSettings:Issuer"],
+                ValidIssuer = configuration["Auth:JwtSettings:Issuer"],
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey =
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Auth:JwtSettings:Key"])),
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Auth:JwtSettings:Key"])),
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero,
             };

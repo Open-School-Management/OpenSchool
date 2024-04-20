@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using System.Text;
-using Common.Log;
+using Serilog;
 using SharedKernel.Core;
 
 namespace SharedKernel.Libraries;
@@ -35,7 +35,7 @@ public class EmailHelper
         }
         catch (Exception ex)
         {
-            Logging.Error(ex);
+            Log.Error(ex.Message);
             throw;
         }
     }

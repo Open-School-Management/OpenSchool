@@ -1,7 +1,7 @@
 using System.Data;
-using Common.Log;
 using Dapper;
 using MySqlConnector;
+using Serilog;
 using SharedKernel.Core;
 
 namespace SharedKernel.MySQL;
@@ -312,7 +312,7 @@ public class DbConnection : IDbConnection
             // Insert bulk Records into DataBase.
             _connection.InfoMessage += (s, e) =>
             {
-                Logging.Error(string.Join(" ----> ", e.Errors.Select(e => e.Message)));
+                Log.Error(string.Join(" ----> ", e.Errors.Select(e => e.Message)));
             };
 
             var result = await bulk.WriteToServerAsync(dataTable, cancellationToken);

@@ -1,34 +1,15 @@
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Sinks.File;
 
-namespace Common.Log;
+namespace Logging;
 
 public class Logging
 {
-    public static void Information(string information)
-    {
-        DefaultLoggingConfig.Logger.Information(information);
-    }
-
-    public static void Warning(string information)
-    {
-        DefaultLoggingConfig.Logger.Warning(information);
-    }
-
-    public static void Error(Exception exception, string messageTemplate = "")
-    {
-        DefaultLoggingConfig.Logger.Error(exception, messageTemplate);
-    }
-
-    public static void Error(string information)
-    {
-        DefaultLoggingConfig.Logger.Error(information);
-    }
-    
     public static Action<HostBuilderContext, LoggerConfiguration> Configure =>
         (context, configuration) =>
         {
-            var applicationName = !string.IsNullOrEmpty(DefaultLoggingConfig.ApplicationName) ? DefaultLoggingConfig.ApplicationName : context.HostingEnvironment.ApplicationName?.ToLower().Replace(".", "-");
+            var applicationName = context.HostingEnvironment.ApplicationName?.ToLower().Replace(".", "-");
             var environmentName = context.HostingEnvironment.EnvironmentName ?? "Development";
 
             configuration

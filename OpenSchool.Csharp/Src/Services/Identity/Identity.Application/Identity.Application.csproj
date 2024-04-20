@@ -13,4 +13,10 @@
       <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Enums\" />
+      <Folder Include="Services\Implements\" />
+    </ItemGroup>
+    
+
 </Project>

@@ -27,7 +27,7 @@
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 
         <!-- FluentValidation-->
-        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.1.2" />
 
         <!-- Db connection provider-->
         <PackageReference Include="Dapper" Version="2.0.123" />
