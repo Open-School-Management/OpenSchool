@@ -9,6 +9,11 @@ namespace SharedKernel.EFCore;
 
 public class CoreDbContext : DbContext, ICoreDbContext
 {
+    public CoreDbContext(DbContextOptions options) : base(options)
+    {
+        
+    }
+    
     #region Implements
 
     public async Task BulkInsertAsync<TEntity>(IList<TEntity> entities, CancellationToken cancellationToken = default) where TEntity : EntityAuditBase

@@ -13,6 +13,7 @@ public static class TableName
     
     public const string Permission = "permission";
     public const string RolePermission = "role_permission";
+    public const string UserPermission = "user_permission";
     
     public const string RefreshToken = "auth_refresh_token";
     public const string SignInHistory = "auth_sign_in_history";

@@ -1,12 +1,12 @@
 namespace Identity.Domain.Entities;
 
-[Table(TableName.UserConfig)]
+[Table(TableName.UserPermission)]
 public class UserPermission : EntityAuditBase
 {
     #region Relationships
 
     public Guid UserId { get; set; }
-    public Guid ActionId { get; set; }
+    public Guid PermissionId { get; set; }
 
     #endregion
     

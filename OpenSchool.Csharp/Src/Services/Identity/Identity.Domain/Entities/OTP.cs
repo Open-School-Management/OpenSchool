@@ -1,7 +1,7 @@
 namespace Identity.Domain.Entities;
 
 [Table(TableName.OTP)]
-public class OTP : EntityBase
+public class OTP : PersonalizedEntityAuditBase
 {
     public string Otp { get; set; }
 
@@ -12,12 +12,6 @@ public class OTP : EntityBase
     public DateTime ProvidedDate { get; set; }
 
     public OtpType Type { get; set; } = OtpType.None;
-    
-    #region Relationships
-
-    public Guid UserId { get; set; }
-
-    #endregion
     
     #region Navigations
     

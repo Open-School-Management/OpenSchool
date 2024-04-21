@@ -1,17 +1,11 @@
 namespace Identity.Domain.Entities;
 
 [Table(TableName.MFA)]
-public class MFA : EntityAuditBase
+public class MFA : PersonalizedEntityAuditBase
 {
     public MFAType Type { get; set; } = MFAType.None;
 
     public bool Enabled { get; set; }
-
-    #region Relationships
-
-    public Guid UserId { get; set; }
-
-    #endregion
     
     #region Navigations
     

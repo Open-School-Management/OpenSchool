@@ -14,6 +14,7 @@ public class Permission : EntityAuditBase
     #region Navigations
     
     public ICollection<RolePermission> RolePermissions { get; set; }
+    public ICollection<UserPermission> UserPermissions { get; set; }
     
     #endregion
     

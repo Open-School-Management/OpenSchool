@@ -6,17 +6,11 @@ namespace Identity.Infrastructure.Persistence.Configurations;
 
 public class EntityAuditConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : EntityAuditBase
 {
-    public void Configure(EntityTypeBuilder<TEntity> builder)
+    public virtual void Configure(EntityTypeBuilder<TEntity> builder)
     {
-        builder.HasQueryFilter(x => !x.IsDeleted);
-        
-        builder
-            .HasKey(e => e.Id);
-
         builder
             .Property(e => e.CreatedBy)
-            .HasMaxLength(255)
-            .IsRequired(false);
+            .HasMaxLength(255);
         
         builder
             .Property(e => e.LastModifiedBy)
@@ -38,7 +32,6 @@ public class EntityAuditConfiguration<TEntity> : IEntityTypeConfiguration<TEntit
         
         builder
             .Property(e => e.IsDeleted)
-            .HasDefaultValue(false)
-            .IsRequired(false);
+            .HasDefaultValue(false);
     }
 }
