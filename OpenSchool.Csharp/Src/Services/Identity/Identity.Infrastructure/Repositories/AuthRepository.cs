@@ -4,12 +4,9 @@ using Identity.Domain.Entities;
 using Identity.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver.Linq;
+using SharedKernel.Application;
 using SharedKernel.Auth;
 using SharedKernel.Contracts;
-using SharedKernel.Contracts.Constants;
-using SharedKernel.Contracts.Repositories;
-using SharedKernel.Domain;
-using SharedKernel.Infrastructures;
 using SharedKernel.Libraries;
 using SharedKernel.UnitOfWork;
 
@@ -21,14 +18,10 @@ public class AuthRepository : IAuthRepository
     private readonly ICurrentUser _currentUser;
     private readonly IServiceProvider _provider;
 
-    public AuthRepository(
-        IApplicationDbContext context, 
-        ICurrentUser currentUser, 
-        IServiceProvider provider)
+    public AuthRepository(IApplicationDbContext context, ICurrentUser currentUser)
     {
         _context = context;
         _currentUser = currentUser;
-        _provider = provider;
     }
     
     public IUnitOfWork UnitOfWork => _context;
@@ -84,33 +77,33 @@ public class AuthRepository : IAuthRepository
         
         _context.RefreshTokens.Remove(refreshToken);
     }
-
-    public async Task AddRoleForUserAsync(Guid userId, List<Guid> roleIds, CancellationToken cancellationToken = default)
+    
+    public async Task AddRoleForUserAsync(List<UserRole> userRoles, CancellationToken cancellationToken = default)
     {
-        await _context.UserRoles.AddRangeAsync(roleIds.Select(r => new UserRole { UserId = userId, RoleId = r }), cancellationToken);
+        await _context.UserRoles.AddRangeAsync(userRoles, cancellationToken);
     }
     
-    public void RevokeRoleForUserAsync(Guid userId, List<UserRole> userRoles, CancellationToken cancellationToken = default)
+    public void RevokeRoleForUserAsync(List<UserRole> userRoles, CancellationToken cancellationToken = default)
     {
         _context.UserRoles.RemoveRange(userRoles);
     }
 
-    public async Task AddPermissionForRoleAsync(Guid roleId, List<Guid> permissionIds, CancellationToken cancellationToken = default)
+    public async Task AddPermissionForRoleAsync(List<RolePermission> rolePermissions, CancellationToken cancellationToken = default)
     {
-        await _context.RolePermissions.AddRangeAsync(permissionIds.Select(p => new RolePermission { RoleId = roleId, PermissionId = p }), cancellationToken);
+        await _context.RolePermissions.AddRangeAsync(rolePermissions, cancellationToken);
     }
     
-    public void RevokePermissionForRoleAsync(Guid roleId, List<RolePermission> rolePermissions, CancellationToken cancellationToken = default)
+    public void RevokePermissionForRoleAsync(List<RolePermission> rolePermissions, CancellationToken cancellationToken = default)
     {
         _context.RolePermissions.RemoveRange(rolePermissions);
     }
 
-    public async Task AddPermissionForUserAsync(Guid userId, List<Guid> permissionIds, CancellationToken cancellationToken = default)
+    public async Task AddPermissionForUserAsync(List<UserPermission> userPermissions, CancellationToken cancellationToken = default)
     {
-        await _context.UserPermissions.AddRangeAsync(permissionIds.Select(p => new UserPermission { UserId = userId, PermissionId = p }), cancellationToken);
+        await _context.UserPermissions.AddRangeAsync(userPermissions, cancellationToken);
     }
     
-    public void RevokePermissionForUserAsync(Guid userId, List<UserPermission> userPermissions, CancellationToken cancellationToken = default)
+    public void RevokePermissionForUserAsync(List<UserPermission> userPermissions, CancellationToken cancellationToken = default)
     {
         _context.UserPermissions.RemoveRange(userPermissions);
     }

@@ -1,6 +1,6 @@
 namespace Identity.Application.DTOs.User;
 
-public class UserUpdateDto
+public class UpdateUserDto
 {
     
 }
