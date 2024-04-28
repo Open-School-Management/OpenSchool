@@ -2,19 +2,15 @@
 
 public class IntegrationEvent
 {
-    public string EventId { get; protected set; }
+    public Guid Id { get; protected set; }
 
     public DateTime Timestamp { get; protected set; }
-
-    public string EventType { get; protected set; }
-
     public object Body { get; protected set; }
 
-    public IntegrationEvent(string eventId, DateTime timestamp, string eventType, object body)
+    public IntegrationEvent(Guid id, DateTime timestamp, object body)
     {
-        EventId = eventId;
+        Id = id;
         Timestamp = timestamp;
-        EventType = eventType;
         Body = body;
     }
 }

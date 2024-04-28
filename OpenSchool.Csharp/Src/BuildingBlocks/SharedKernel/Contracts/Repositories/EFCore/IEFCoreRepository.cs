@@ -4,9 +4,9 @@ using SharedKernel.UnitOfWork;
 
 namespace SharedKernel.Contracts.Repositories;
 
-public interface IEFCoreWriteOnlyRepository<TEntity, in TKey ,TDbContext> : IEFCoreReadOnlyRepository<TEntity, TKey ,TDbContext>
+public interface IEFCoreRepository<TEntity, in TKey ,TDbContext> : IEFCoreReadRepository<TEntity, TKey ,TDbContext>
     where TEntity : EntityBase<TKey>
-    where TDbContext : CoreDbContext
+    where TDbContext : ICoreDbContext
 {
     IUnitOfWork UnitOfWork { get; }
     

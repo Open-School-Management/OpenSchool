@@ -32,10 +32,11 @@ public class User : EntityAuditBase
     
     public virtual Avatar Avatar { get; set; }
     public virtual UserConfig UserConfig { get; set; }
-    public virtual RefreshToken RefreshToken { get; set; }
     public virtual SecretKey SecretKey { get; set; }
     public virtual OTP Otp { get; set; }
     public virtual MFA Mfa { get; set; }
+    
+    public ICollection<RefreshToken> RefreshTokens { get; set; }
     public ICollection<UserRole> UserRoles { get; set; }
     public ICollection<UserPermission> UserPermissions { get; set; }
     public ICollection<SignInHistory> SignInHistories { get; set; }

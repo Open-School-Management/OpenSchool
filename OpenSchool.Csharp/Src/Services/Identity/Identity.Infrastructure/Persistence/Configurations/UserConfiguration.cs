@@ -84,11 +84,6 @@ public class UserConfiguration : EntityAuditConfiguration<User>
             .HasOne(u => u.UserConfig)
             .WithOne(uc => uc.User)
             .HasForeignKey<UserConfig>(u => u.OwnerId);
-
-        builder
-            .HasOne(u => u.RefreshToken)
-            .WithOne(uc => uc.User)
-            .HasForeignKey<RefreshToken>(u => u.OwnerId);
         
         builder
             .HasOne(u => u.SecretKey)

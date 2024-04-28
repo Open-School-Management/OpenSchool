@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OnlineShop.Application.Properties {
+namespace Identity.Application.Properties {
     using System;
     
     

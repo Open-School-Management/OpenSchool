@@ -43,6 +43,7 @@ public class AccessTokenValidatorAsyncFilter : IAsyncResourceFilter
         {
             context.HttpContext.Request.Headers[HeaderNames.Authorization] = string.Empty;
         }
+        
         await next();
     }
 }

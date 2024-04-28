@@ -18,5 +18,10 @@ public class RefreshTokenConfiguration : EntityAuditConfiguration<RefreshToken>
         builder
             .Property(a => a.CurrentAccessToken)
             .HasMaxLength(512);
+        
+        builder
+            .HasOne(u => u.User)
+            .WithMany(uc => uc.RefreshTokens)
+            .HasForeignKey(u => u.OwnerId);
     }
 }

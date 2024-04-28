@@ -13,6 +13,13 @@ public interface IAuthService
     string GenerateRefreshToken();
 
     Task RevokeAccessTokenAsync(string accessToken, CancellationToken cancellationToken = default);
+    
+    Task<List<string>> RevokeAllAccessTokenAsync(Guid userId, CancellationToken cancellationToken = default);
 
     Task<bool> CheckRefreshTokenAsync(string value, Guid ownerId, CancellationToken cancellationToken = default);
+
+    Task<bool> IsNewLoginAddressAsync(CancellationToken cancellationToken = default);
+
+    string GenerateOtp();
+
 }

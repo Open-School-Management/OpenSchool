@@ -6,7 +6,14 @@ namespace SharedKernel.Libraries;
 public static class StringExtensions
 {
     #region String
+    public static string PascalToStandard(this string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return input;
 
+        return Regex.Replace(input, "(\\B[A-Z])", " $1");
+    }
+    
     /// <summary>
     /// Chuyển camel case sang snake case
     /// </summary>
@@ -33,6 +40,21 @@ public static class StringExtensions
         return string
             .Concat(input.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString().ToLower() : x.ToString()))
             .ToLower();
+    }
+    
+    /// <summary>
+    /// Chuyển camel case sang snake case upper
+    /// </summary>
+    public static string ToSnakeCaseUpper(this string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            throw new ArgumentNullException(nameof(input));
+        }
+
+        return string
+            .Concat(input.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString().ToLower() : x.ToString()))
+            .ToUpper();
     }
 
     /// <summary>
@@ -61,6 +83,21 @@ public static class StringExtensions
         return string
             .Concat(input.Select((x, i) => i > 0 && char.IsUpper(x) ? "-" + x.ToString().ToLower() : x.ToString()))
             .ToLower();
+    }
+    
+    /// <summary>
+    /// Chuyển camel case sang kebab case lower
+    /// </summary>
+    public static string ToKebabCaseUpper(this string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            throw new ArgumentNullException(nameof(input));
+        }
+
+        return string
+            .Concat(input.Select((x, i) => i > 0 && char.IsUpper(x) ? "-" + x.ToString().ToLower() : x.ToString()))
+            .ToUpper();
     }
 
     /// <summary>

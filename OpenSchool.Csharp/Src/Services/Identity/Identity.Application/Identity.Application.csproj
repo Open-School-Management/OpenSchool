@@ -14,9 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTOs\Config\" />
-      <Folder Include="Enums\" />
-      <Folder Include="Services\Implements\" />
+      <Folder Include="IntegrationEvents\EventHandling\" />
     </ItemGroup>
     
 

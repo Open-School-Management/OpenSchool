@@ -4,9 +4,9 @@ using SharedKernel.EFCore;
 
 namespace SharedKernel.Contracts.Repositories;
 
-public interface IEFCoreReadOnlyRepository<TEntity, in TKey, TDbContext> 
+public interface IEFCoreReadRepository<TEntity, in TKey, TDbContext> 
     where TEntity : EntityBase<TKey>
-    where TDbContext : CoreDbContext
+    where TDbContext : ICoreDbContext
 {
     IQueryable<TEntity> FindAll(bool trackChanges = false);
     

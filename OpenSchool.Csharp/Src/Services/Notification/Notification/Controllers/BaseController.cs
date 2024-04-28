@@ -1,10 +1,9 @@
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Identity.Api.Controllers;
+namespace Notification.Controllers;
 
 [ApiController]
-[Route("api/v1/microservices/[controller]")]
+[Route("api/v1/open-school-microservices/[controller]")]
 public class BaseController : ControllerBase
 {
 }

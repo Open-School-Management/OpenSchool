@@ -91,8 +91,7 @@ public static class Enum
         Import = 5,
         Upload = 6,
         Download = 7,
-        Supplier = 8,
-        Category = 9
+        Update = 8,
     }
 
     public enum FileType

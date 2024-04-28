@@ -2,6 +2,8 @@ using System.Reflection;
 using EFCore.BulkExtensions;
 using MassTransit.Internals;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using SharedKernel.Auth;
 using SharedKernel.Domain;
 using SharedKernel.Libraries;
 
@@ -82,6 +84,7 @@ public class CoreDbContext : DbContext, ICoreDbContext
 
     private void ApplyAuditFieldsToModifiedEntities()
     {
+        var currentUser = this.GetService<ICurrentUser>();
         var modified = ChangeTracker.Entries()
             .Where(e => e.State == EntityState.Added 
                         || e.State == EntityState.Modified
@@ -93,13 +96,29 @@ public class CoreDbContext : DbContext, ICoreDbContext
             {
                 case EntityState.Added:
                 {
-                    entry.State = EntityState.Added;
+                    if (entry.Entity is IUserTracking userTracking)
+                    {
+                        userTracking.CreatedBy = currentUser.Context.OwnerId;
+                    }
+
+                    if (entry.Entity is IDateTracking dateTracking)
+                    {
+                        dateTracking.CreatedDate = DateHelper.Now;
+                    }
                     break;
                 }
                 case EntityState.Modified: 
                 {
                     Entry(entry.Entity).Property("Id").IsModified = false;
-                    entry.State = EntityState.Modified;
+                    if (entry.Entity is IUserTracking userTracking)
+                    {
+                        userTracking.LastModifiedBy = currentUser.Context.OwnerId;
+                    }
+
+                    if (entry.Entity is IDateTracking dateTracking)
+                    {
+                        dateTracking.LastModifiedDate = DateHelper.Now;
+                    }
                     break;
                 }
                 case EntityState.Deleted:
@@ -107,6 +126,9 @@ public class CoreDbContext : DbContext, ICoreDbContext
                     if (entry.Entity is ISoftDelete softDelete)
                     {
                         Entry(entry.Entity).Property("Id").IsModified = false;
+                        softDelete.DeletedBy = currentUser.Context.OwnerId;
+                        softDelete.DeletedDate = DateHelper.Now;
+                        softDelete.IsDeleted = true;
                         entry.State = EntityState.Modified;
                     }
                     break;

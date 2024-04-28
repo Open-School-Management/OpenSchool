@@ -1,9 +1,11 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Identity.Application.DTOs.Auth;
 using Identity.Application.Persistence;
 using Identity.Application.Repositories.Interfaces;
 using Identity.Domain.Entities;
-using Identity.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.Application;
 using SharedKernel.Auth;
 using SharedKernel.Contracts;
@@ -31,15 +33,10 @@ public class AuthRepository : IAuthRepository
         return await GetTokenUserByIdentityOrOwnerIdAsync(username, password, null, cancellationToken);
     }
 
-    public async Task<TokenUser?> GetTokenUserByIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<TokenUser?> GetTokenUserByOwnerIdAsync(Guid ownerId, CancellationToken cancellationToken = default)
     {
-        return await GetTokenUserByIdentityOrOwnerIdAsync(null, null, userId, cancellationToken);
+        return await GetTokenUserByIdentityOrOwnerIdAsync(null, null, ownerId, cancellationToken);
     }
-    public async Task SignOutAsync(CancellationToken cancellationToken = default)
-    {
-        await RemoveRefreshTokenAsync(cancellationToken);
-    }
-
     public async Task<bool> CheckRefreshTokenAsync(string value, Guid userId, CancellationToken cancellationToken = default)
     {
         var refreshToken = await _context.RefreshTokens
@@ -54,7 +51,8 @@ public class AuthRepository : IAuthRepository
 
     public async Task CreateOrUpdateRefreshTokenAsync(RefreshToken refreshToken, CancellationToken cancellationToken = default)
     {
-        var existingRefreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.OwnerId.Equals(refreshToken.OwnerId), cancellationToken);
+        var existingRefreshToken = await _context.RefreshTokens
+            .FirstOrDefaultAsync(rt => rt.CurrentAccessToken.Equals(_currentUser.Context.AccessToken), cancellationToken);
         
         if (existingRefreshToken == null)
         {
@@ -72,12 +70,37 @@ public class AuthRepository : IAuthRepository
 
     public async Task RemoveRefreshTokenAsync(CancellationToken cancellationToken = default)
     {
-        var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.CurrentAccessToken.Equals(_currentUser.Context.AccessToken), cancellationToken);
+        var refreshToken = await _context.RefreshTokens
+            .FirstOrDefaultAsync(rt => rt.CurrentAccessToken.Equals(_currentUser.Context.AccessToken), cancellationToken);
         if (refreshToken == null) return;
         
         _context.RefreshTokens.Remove(refreshToken);
     }
+
+    public async Task CreateOtpAsync(OTP otp, CancellationToken cancellationToken = default)
+    {
+        await _context.OTPs.AddAsync(otp, cancellationToken);
+    }
     
+    public void UpdateOtpAsync(OTP otp, CancellationToken cancellationToken = default)
+    {
+        _context.OTPs.Update(otp);
+    }
+
+    public async Task<OTP?> GetUnexpiredOtpAsync(Guid ownerId, string otp, CancellationToken cancellationToken = default)
+    {
+        return await _context.OTPs.
+            SingleOrDefaultAsync(e => e.Otp == otp && e.OwnerId == ownerId && !e.IsUsed && e.ExpiredDate >= DateHelper.Now, cancellationToken);
+    }
+
+    public async Task RemoveRefreshTokenAsync(List<string> accessTokens, CancellationToken cancellationToken = default)
+    {
+        var refreshTokens = await _context.RefreshTokens.Where(e => accessTokens.Contains(e.CurrentAccessToken)).ToListAsync(cancellationToken);
+        if (refreshTokens.Any()) return;
+        
+        _context.RefreshTokens.RemoveRange(refreshTokens);
+    }
+
     public async Task AddRoleForUserAsync(List<UserRole> userRoles, CancellationToken cancellationToken = default)
     {
         await _context.UserRoles.AddRangeAsync(userRoles, cancellationToken);
@@ -113,31 +136,51 @@ public class AuthRepository : IAuthRepository
         throw new NotImplementedException();
     }
 
+    public async Task<bool> CheckSignInHistoryAsync(string ipAddress, string ua, string device, string browser, string os, CancellationToken cancellationToken = default)
+    {
+        var existsInHistory = await _context.SignInHistories
+            .AnyAsync(s =>
+                s.Ip == ipAddress &&
+                s.UA == ua &&
+                s.Device == device &&
+                s.Browser == browser &&
+                s.OS == os,
+            cancellationToken);
+
+        return existsInHistory;
+    }
+
+    public async Task<IPagedList<SignInHistoryDto>> GetSignInHistoryPagingAsync(PagingRequest pagingRequest, CancellationToken cancellationToken = default)
+    {
+        var mapper = _provider.GetRequiredService<IMapper>();
+        var a = mapper.ProjectTo<SignInHistoryDto>(_context.SignInHistories);
+        return await _context.SignInHistories
+            .AsNoTracking()
+            .Where(e => e.Username == _currentUser.Context.Username)
+            .OrderByDescending(e => e.SignInTime)
+            .ToPagedListAsync<SignInHistory, SignInHistoryDto>(pagingRequest.Page, pagingRequest.Size, pagingRequest.IndexFrom, cancellationToken);
+    }
+
     #region Privates
 
     private async Task<TokenUser?> GetTokenUserByIdentityOrOwnerIdAsync(string? username, string? password, Guid? userId, CancellationToken cancellationToken = default)
     {
         IQueryable<User> query = _context.Users.AsNoTracking()
             .Include(u => u.UserPermissions)
+                .ThenInclude(up => up.Permission)
             .Include(u => u.UserRoles)
-            .ThenInclude(ur => ur.Role)
-            .ThenInclude(r => r.RolePermissions)
-            .ThenInclude(rp => rp.Permission);
+                .ThenInclude(ur => ur.Role)
+                .ThenInclude(r => r.RolePermissions)
+                .ThenInclude(rp => rp.Permission);
         
         if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
         {
             var md5Password = password.ToMD5();
             query =  query.Where(u => u.Username == username && u.PasswordHash == md5Password);
         }
-        else if (userId != null)
-        {
-            query = query.Where(u => u.Id.Equals(userId));
-        }
-        else
-        {
-            return null;
-        }
-
+        else if (userId != null) query = query.Where(u => u.Id.Equals(userId));
+        else return null;
+        
         var user = await query.SingleOrDefaultAsync(cancellationToken);
         if (user == null) return default!;
         
@@ -157,8 +200,8 @@ public class AuthRepository : IAuthRepository
             Gender = user.Gender,
         };
         
-        var roles = user.UserRoles?.Select(u => u.Role).DistinctBy(r => r.Code).ToList();
-        if (roles == null || !roles.Any()) return tokenUser;
+        var roles = user.UserRoles.Select(u => u.Role).DistinctBy(r => r.Code).ToList();
+        if (!roles.Any()) return tokenUser;
         
         var supperAdmin = roles.FirstOrDefault(x => x.Code.Equals(RoleConstant.SupperAdmin));
         var admin = roles.FirstOrDefault(x => x.Code.Equals(RoleConstant.Admin));
@@ -182,9 +225,9 @@ public class AuthRepository : IAuthRepository
         }
         
         tokenUser.RoleNames = roles.Select(x => x.Name).ToList();
+        
         return tokenUser;
     }
     
-
     #endregion
 }

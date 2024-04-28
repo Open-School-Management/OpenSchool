@@ -12,7 +12,7 @@ public interface IApplicationDbContext : ICoreDbContext
     DbSet<RefreshToken> RefreshTokens { get; set; }
     DbSet<Role> Roles { get; set; }
     DbSet<UserRole> UserRoles { get; set; }
-    DbSet<Permission> Actions { get; set; }
+    DbSet<Permission> Permissions { get; set; }
     DbSet<UserPermission> UserPermissions { get; set; }
     DbSet<RolePermission> RolePermissions { get; set; }
     DbSet<SignInHistory> SignInHistories { get; set; }

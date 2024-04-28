@@ -1,6 +1,6 @@
 namespace Identity.Application.Services.Interfaces;
 
-public class IUserService
+public interface IUserService
 {
-    
+    Task<string> GetAvatarUrlByFileNameAsync(string fileName, Guid ownerId, CancellationToken cancellationToken);
 }

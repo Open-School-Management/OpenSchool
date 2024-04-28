@@ -2,6 +2,7 @@ using Caching;
 using Identity.Api.Configures;
 using Identity.Application;
 using Identity.Infrastructure;
+using Identity.Infrastructure.Persistence;
 using Microsoft.AspNetCore.HttpOverrides;
 using SharedKernel.Configures;
 using SharedKernel.Core;
@@ -41,6 +42,7 @@ try
     {
         options.Filters.Add(new AccessTokenValidatorAsyncFilter());
     });
+    
     services.AddInfrastructureServices(configuration);
 
     services.AddApplicationServices(configuration);
@@ -59,6 +61,14 @@ try
     app.UseCoreWebApplication(app.Environment);
     
     // Initialise and seed database
+    using (var scope = app.Services.CreateScope())
+    {
+        var contextSeed = scope.ServiceProvider.GetRequiredService<ApplicationDbContextSeed>();
+        await contextSeed.InitialiseAsync();
+        await contextSeed.SeedAsync();
+        await contextSeed.SyncPermissionsBasedOnChanges();
+    }
+    
     app.Run();
 }
 catch (Exception ex)

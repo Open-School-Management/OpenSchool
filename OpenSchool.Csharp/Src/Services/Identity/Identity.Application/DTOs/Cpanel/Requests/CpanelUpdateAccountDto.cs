@@ -1,6 +1,6 @@
 namespace Identity.Application.DTOs.Cpanel;
 
-public class CpanelRoleCreateDto
+public class CpanelUpdateAccountDto
 {
     
 }

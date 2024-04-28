@@ -286,8 +286,7 @@ namespace Identity.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId")
-                        .IsUnique();
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("auth_refresh_token");
                 });
@@ -807,8 +806,8 @@ namespace Identity.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Identity.Domain.Entities.RefreshToken", b =>
                 {
                     b.HasOne("Identity.Domain.Entities.User", "User")
-                        .WithOne("RefreshToken")
-                        .HasForeignKey("Identity.Domain.Entities.RefreshToken", "OwnerId")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -930,8 +929,7 @@ namespace Identity.Infrastructure.Persistence.Migrations
                     b.Navigation("Otp")
                         .IsRequired();
 
-                    b.Navigation("RefreshToken")
-                        .IsRequired();
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("SecretKey")
                         .IsRequired();

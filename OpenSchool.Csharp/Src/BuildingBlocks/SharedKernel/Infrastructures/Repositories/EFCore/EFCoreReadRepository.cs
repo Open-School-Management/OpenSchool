@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Caching;
+using MassTransit.Internals;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Auth;
 using SharedKernel.Contracts;
@@ -9,7 +10,7 @@ using SharedKernel.EFCore;
 
 namespace SharedKernel.Infrastructures;
 
-public class EFCoreReadOnlyRepository<TEntity, TKey, TDbContext> : IEFCoreReadOnlyRepository<TEntity, TKey, TDbContext>
+public class EFCoreReadRepository<TEntity, TKey, TDbContext> : IEFCoreReadRepository<TEntity, TKey, TDbContext>
     where TEntity :  EntityBase<TKey>
     where TDbContext : CoreDbContext
 {
@@ -20,7 +21,7 @@ public class EFCoreReadOnlyRepository<TEntity, TKey, TDbContext> : IEFCoreReadOn
     protected readonly string _tableName;
     public readonly bool _isSystemTable;
     
-    public EFCoreReadOnlyRepository(
+    public EFCoreReadRepository(
         TDbContext context, 
         ICurrentUser currentUser,
         ISequenceCaching sequenceCaching)
@@ -30,7 +31,7 @@ public class EFCoreReadOnlyRepository<TEntity, TKey, TDbContext> : IEFCoreReadOn
         _sequenceCaching = sequenceCaching;
         _tableName = ((TEntity)Activator.CreateInstance(typeof(TEntity))).GetTableName();
         _dbSet = _context.Set<TEntity>();
-        _isSystemTable =  typeof(TEntity).GetProperty("OwnerId") == null;
+        _isSystemTable =  typeof(TEntity).HasInterface<IPersonalizeEntity>() == null;
     }
     
     public virtual IQueryable<TEntity> FindAll(bool trackChanges = false)

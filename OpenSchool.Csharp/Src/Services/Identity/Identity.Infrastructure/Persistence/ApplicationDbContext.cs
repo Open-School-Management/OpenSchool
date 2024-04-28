@@ -21,7 +21,7 @@ public class ApplicationDbContext : CoreDbContext, IApplicationDbContext
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
-    public DbSet<Permission> Actions { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
     public DbSet<UserPermission> UserPermissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<SignInHistory> SignInHistories { get; set; }

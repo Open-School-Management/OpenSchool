@@ -40,7 +40,10 @@ public class RequestMiddleware
                 
             }
         });
+        
         await _next(context);
+        
+        
     }
     
     private (string, RequestInformation) GetParameter(OpenHttpRequest request, string requestId)
