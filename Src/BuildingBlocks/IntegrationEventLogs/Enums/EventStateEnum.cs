@@ -1,6 +1,9 @@
-namespace IntegrationEventLogs.Enums;
+namespace IntegrationEventLogs;
 
-public class EventStateEnum
+public enum EventStateEnum : int
 {
-    
+    NotPublished = 0,
+    InProgress = 1,
+    Published = 2,
+    PublishedFailed = 3
 }
