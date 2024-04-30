@@ -9,8 +9,6 @@ public class MessageHub : Hub
 { 
     public static Dictionary<string, List<string>> Connections = new Dictionary<string, List<string>>();
     public static Dictionary<string, string> KeyValueConnections = new Dictionary<string, string>();
-    public static DateTime LastSendTyping = new DateTime();
-    public static object lockObj = new object();
 
     private readonly IHubContext<MessageHub> _hubContext;
     private readonly ICurrentUser _currentUser;
@@ -89,7 +87,7 @@ public class MessageHub : Hub
         else
         {
             var owner = claims.First(x => x.Type == ClaimConstant.USER_ID);
-            var key = $"{owner.Value}";
+            var key = $"owner_{owner.Value}";
 
             if (Connections.TryGetValue(key, out var connectionIds))
             {

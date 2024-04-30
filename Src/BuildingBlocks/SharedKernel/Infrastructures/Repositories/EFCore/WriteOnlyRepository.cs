@@ -10,12 +10,12 @@ using SharedKernel.UnitOfWork;
 namespace SharedKernel.Infrastructures;
 
 
-public class EFCoreRepository<TEntity, TKey, TDbContext>
-    : EFCoreReadRepository<TEntity, TKey, TDbContext>, IEFCoreRepository<TEntity, TKey, TDbContext>
+public class WriteOnlyRepository<TEntity, TKey, TDbContext>
+    : ReadOnlyRepository<TEntity, TKey, TDbContext>, IWriteOnlyRepository<TEntity, TKey, TDbContext>
     where TEntity : EntityBase<TKey>
     where TDbContext : CoreDbContext
 {
-    public EFCoreRepository(
+    public WriteOnlyRepository(
         TDbContext context,
         ICurrentUser currentUser, 
         ISequenceCaching sequenceCaching

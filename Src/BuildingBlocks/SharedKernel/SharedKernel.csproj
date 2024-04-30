@@ -11,6 +11,7 @@
         <!-- Versioning -->
         <PackageReference Include="EFCore.BulkExtensions" Version="8.0.2" />
         <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+        <PackageReference Include="MassTransit.Abstractions" Version="8.0.6" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
 
@@ -60,9 +61,6 @@
         <!-- Excel package-->
         <PackageReference Include="EPPlus" Version="5.8.12" />
 
-        <!-- RabbitMQ-->
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
-        <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
         
         <!-- Authentication-->
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate" Version="3.1.0" />

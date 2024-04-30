@@ -5,7 +5,7 @@ using SharedKernel.Contracts.Repositories;
 
 namespace Identity.Application.Repositories.Interfaces;
 
-public interface IAvatarRepository : IEFCoreRepository<Avatar, Guid, IApplicationDbContext>
+public interface IAvatarRepository : IWriteOnlyRepository<Avatar, Guid, IApplicationDbContext>
 {
     Task<AvatarDto> GetAvatarAsync(CancellationToken cancellationToken = default);
     

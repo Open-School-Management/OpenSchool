@@ -1,6 +1,6 @@
 using MessageBroker.Abstractions.Events;
 
-namespace MessageBroker.Abstractions.Abstractions;
+namespace MessageBroker.Abstractions;
 
 public interface IIntegrationEventHandler<in TIntegrationEvent> : IIntegrationEventHandler 
     where TIntegrationEvent : IntegrationEvent

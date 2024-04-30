@@ -6,4 +6,16 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <!-- RabbitMQ-->
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
+        <PackageReference Include="OpenTelemetry.Api" Version="1.8.1" />
+        <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
+        <PackageReference Include="Polly.Core" Version="8.0.0"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\MessageBroker.Abstractions\MessageBroker.Abstractions.csproj" />
+    </ItemGroup>
+
 </Project>

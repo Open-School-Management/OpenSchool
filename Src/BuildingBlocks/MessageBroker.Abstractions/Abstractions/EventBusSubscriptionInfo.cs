@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 
-namespace MessageBroker.Abstractions.Abstractions;
+namespace MessageBroker.Abstractions;
 
 public class EventBusSubscriptionInfo
 {

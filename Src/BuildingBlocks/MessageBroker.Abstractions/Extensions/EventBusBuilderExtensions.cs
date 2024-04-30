@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using MessageBroker.Abstractions.Abstractions;
 using MessageBroker.Abstractions.Events;
 using Microsoft.Extensions.DependencyInjection;
 

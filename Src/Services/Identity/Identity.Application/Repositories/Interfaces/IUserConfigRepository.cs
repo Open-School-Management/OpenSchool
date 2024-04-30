@@ -4,7 +4,7 @@ using SharedKernel.Contracts.Repositories;
 
 namespace Identity.Application.Repositories.Interfaces;
 
-public interface IUserConfigRepository : IEFCoreRepository<UserConfig, Guid, IApplicationDbContext>
+public interface IUserConfigRepository : IWriteOnlyRepository<UserConfig, Guid, IApplicationDbContext>
 {
     Task<UserConfig> CreateOrUpdateAsync(UserConfig userConfig, CancellationToken cancellationToken);
     

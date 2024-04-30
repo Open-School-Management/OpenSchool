@@ -10,7 +10,7 @@ using SharedKernel.EFCore;
 
 namespace SharedKernel.Infrastructures;
 
-public class EFCoreReadRepository<TEntity, TKey, TDbContext> : IEFCoreReadRepository<TEntity, TKey, TDbContext>
+public class ReadOnlyRepository<TEntity, TKey, TDbContext> : IReadOnlyRepository<TEntity, TKey, TDbContext>
     where TEntity :  EntityBase<TKey>
     where TDbContext : CoreDbContext
 {
@@ -21,7 +21,7 @@ public class EFCoreReadRepository<TEntity, TKey, TDbContext> : IEFCoreReadReposi
     protected readonly string _tableName;
     public readonly bool _isSystemTable;
     
-    public EFCoreReadRepository(
+    public ReadOnlyRepository(
         TDbContext context, 
         ICurrentUser currentUser,
         ISequenceCaching sequenceCaching)
@@ -29,7 +29,7 @@ public class EFCoreReadRepository<TEntity, TKey, TDbContext> : IEFCoreReadReposi
         _context = context;
         _currentUser = currentUser;
         _sequenceCaching = sequenceCaching;
-        _tableName = ((TEntity)Activator.CreateInstance(typeof(TEntity))).GetTableName();
+        _tableName = ((TEntity)Activator.CreateInstance(typeof(TEntity)))?.GetTableName();
         _dbSet = _context.Set<TEntity>();
         _isSystemTable =  typeof(TEntity).HasInterface<IPersonalizeEntity>() == null;
     }

@@ -4,7 +4,7 @@ using SharedKernel.EFCore;
 
 namespace SharedKernel.Contracts.Repositories;
 
-public interface IEFCoreReadRepository<TEntity, in TKey, TDbContext> 
+public interface IReadOnlyRepository<TEntity, in TKey, TDbContext> 
     where TEntity : EntityBase<TKey>
     where TDbContext : ICoreDbContext
 {

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MessageBroker.Abstractions.Abstractions;
+namespace MessageBroker.Abstractions;
 
 public interface IEventBusBuilder
 {

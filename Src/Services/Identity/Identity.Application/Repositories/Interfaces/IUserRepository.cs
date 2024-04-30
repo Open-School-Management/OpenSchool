@@ -6,7 +6,7 @@ using SharedKernel.Contracts.Repositories;
 
 namespace Identity.Application.Repositories.Interfaces;
 
-public interface IUserRepository : IEFCoreRepository<User, Guid, IApplicationDbContext>
+public interface IUserRepository : IWriteOnlyRepository<User, Guid, IApplicationDbContext>
 {
     Task<UserDto> GetUserInformationAsync(Guid userId, CancellationToken cancellationToken = default);
     
