@@ -8,10 +8,10 @@
 
     <ItemGroup>
         <!-- RabbitMQ-->
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
+        <PackageReference Include="Aspire.RabbitMQ.Client" Version="8.0.0-preview.6.24214.1" />
         <PackageReference Include="OpenTelemetry.Api" Version="1.8.1" />
-        <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
-        <PackageReference Include="Polly.Core" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0"/>
+        <PackageReference Include="Polly.Core" Version="8.3.1"/>
     </ItemGroup>
     
     <ItemGroup>
