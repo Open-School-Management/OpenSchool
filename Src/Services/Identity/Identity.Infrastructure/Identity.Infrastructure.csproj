@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\Caching\Caching.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\IntegrationEventLogs\IntegrationEventLogs.csproj" />
       <ProjectReference Include="..\..\..\BuildingBlocks\Logging\Logging.csproj" />
       <ProjectReference Include="..\..\..\BuildingBlocks\SharedKernel\SharedKernel.csproj" />
       <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />

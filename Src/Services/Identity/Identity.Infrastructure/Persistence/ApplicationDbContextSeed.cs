@@ -14,14 +14,10 @@ namespace Identity.Infrastructure.Persistence;
 public class ApplicationDbContextSeed
 {
     private readonly ApplicationDbContext _context;
-    private readonly IHttpContextAccessor _accessor;
-    private readonly IServiceProvider _provider;
 
-    public ApplicationDbContextSeed(ApplicationDbContext context, IHttpContextAccessor accessor, IServiceProvider provider)
+    public ApplicationDbContextSeed(ApplicationDbContext context)
     {
         _context = context;
-        _accessor = accessor;
-        _provider = provider;
     }
     
     /// <summary>

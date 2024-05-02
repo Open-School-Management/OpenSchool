@@ -1,3 +1,4 @@
+using SharedKernel.Domain;
 using static SharedKernel.Contracts.Enum;
 
 namespace SharedKernel.Contracts;
@@ -18,8 +19,12 @@ public interface IAuthService
 
     Task<bool> CheckRefreshTokenAsync(string value, Guid ownerId, CancellationToken cancellationToken = default);
 
-    Task<bool> IsNewLoginAddressAsync(CancellationToken cancellationToken = default);
+    Task<bool> IsNewLoginAddressAsync(RequestValue requestValue, CancellationToken cancellationToken = default);
+
+    Task<RequestValue> GetRequestValueAsync(CancellationToken cancellationToken = default);
 
     string GenerateOtp();
+    
+    
 
 }

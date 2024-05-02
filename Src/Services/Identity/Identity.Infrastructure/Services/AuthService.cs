@@ -4,14 +4,15 @@ using System.Text;
 using Caching;
 using Identity.Application.Constants;
 using Identity.Application.Repositories.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using SharedKernel.Auth;
 using SharedKernel.Contracts;
 using SharedKernel.Core;
+using SharedKernel.Domain;
 using SharedKernel.Libraries;
-using SharedKernel.Runtime.Exceptions;
 using UAParser;
 using Utility = SharedKernel.Libraries.Utility;
 
@@ -23,16 +24,22 @@ public class AuthService : IAuthService
     private readonly IConfiguration _configuration;
     private readonly ISequenceCaching _caching;
     private readonly ICurrentUser _currentUser;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IServiceProvider _provider;
     public AuthService(
         IAuthRepository authRepository,
         IConfiguration configuration,
         ISequenceCaching caching,
-        ICurrentUser currentUser)
+        ICurrentUser currentUser,
+        IHttpContextAccessor httpContextAccessor,
+        IServiceProvider provider)
     {
         _authRepository = authRepository;
         _configuration = configuration;
         _caching = caching;
         _currentUser = currentUser;
+        _httpContextAccessor = httpContextAccessor;
+        _provider = provider;
     }
     
     public bool CheckPermission(ActionExponent exponent)
@@ -136,23 +143,35 @@ public class AuthService : IAuthService
         return tokens.ToList();
     }
     
-    public async Task<bool> IsNewLoginAddressAsync(CancellationToken cancellationToken = default)
+    public async Task<bool> IsNewLoginAddressAsync(RequestValue requestValue, CancellationToken cancellationToken = default)
     {
-        var request = _currentUser.Context.HttpContext?.Request;
-        if (request == null) throw new BadRequestException("");
-        
-        var ua = request.Headers[HeaderNames.UserAgent].ToString(); // Thông tin trình duyệt và hệ điều hành
-        var c = Parser.GetDefault().Parse(ua); 
-        var device = c.Device.Family;
-        var ip = AuthUtility.TryGetIP(request);
-        var browser = c.UA.Family + (!string.IsNullOrEmpty(c.UA.Major) ? $" {c.UA.Major}.{c.UA.Minor}" : "");
-        var os = c.OS.Family + (!string.IsNullOrEmpty(c.OS.Major) ? $" {c.OS.Major}" : "") + (!string.IsNullOrEmpty(c.OS.Minor) ? $".{c.OS.Minor}" : "");
+        return await _authRepository.CheckSignInHistoryAsync(requestValue, cancellationToken);
+    }
 
-        return await _authRepository.CheckSignInHistoryAsync(ip, ua, device, browser, os, cancellationToken);
+    public async Task<RequestValue> GetRequestValueAsync(CancellationToken cancellationToken = default)
+    {
+        var value = new RequestValue();
+        var httpRequest = _httpContextAccessor.HttpContext?.Request;
+        var header = httpRequest.Headers;
+        var ua = header[HeaderNames.UserAgent].ToString();
+        var c = Parser.GetDefault().Parse(ua);
+
+        value.Ip = AuthUtility.TryGetIP(httpRequest);
+        value.UA = ua;
+        value.OS = c.OS.Family + (!string.IsNullOrEmpty(c.OS.Major) ? $" {c.OS.Major}" : "") + (!string.IsNullOrEmpty(c.OS.Minor) ? $".{c.OS.Minor}" : "");
+        value.Browser = c.UA.Family + (!string.IsNullOrEmpty(c.UA.Major) ? $" {c.UA.Major}.{c.UA.Minor}" : "");
+        value.Device = c.Device.Family;
+        value.Origin = header[HeaderNames.Origin];
+        value.Time = DateHelper.Now.ToString();
+        value.IpInformation = await AuthUtility.GetIpInformationAsync(_provider, value.Ip);
+
+        return value;
+        
     }
 
     public string GenerateOtp()
     {
         return Utility.RandomNumber(AuthConstant.OTP_LENGTH);
     }
+    
 }

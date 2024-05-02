@@ -104,6 +104,7 @@
 
     <ItemGroup>
       <Folder Include="ApiGateways\" />
+      <Folder Include="Infrastructures\Extensions\" />
     </ItemGroup>
 
     <ItemGroup>

@@ -2,6 +2,7 @@ using System.Reflection;
 using Identity.Application.Persistence;
 using Identity.Domain.Entities;
 using Identity.Infrastructure.Extensions;
+using IntegrationEventLogs;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Domain;
 using SharedKernel.EFCore;
@@ -32,6 +33,7 @@ public class ApplicationDbContext : CoreDbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.UseIntegrationEventLogs();
         
         var entityTypes = modelBuilder.Model.GetEntityTypes();
         foreach (var entityType in entityTypes)
@@ -41,5 +43,6 @@ public class ApplicationDbContext : CoreDbContext, IApplicationDbContext
         }
         
         base.OnModelCreating(modelBuilder);
+        
     }
 }

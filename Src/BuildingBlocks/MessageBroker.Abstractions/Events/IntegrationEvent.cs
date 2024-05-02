@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace MessageBroker.Abstractions.Events;
 
-public class IntegrationEvent
+public record IntegrationEvent
 {
     [JsonInclude]
     public Guid Id { get; set; }

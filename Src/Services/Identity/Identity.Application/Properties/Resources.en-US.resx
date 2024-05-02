@@ -65,4 +65,7 @@
     <data name="auth_id_token_is_invalid" xml:space="preserve">
         <value>Id token is invalid</value>
     </data>
+    <data name="auth_otp_invalid" xml:space="preserve">
+        <value>OTP is invalid</value>
+    </data>
 </root>

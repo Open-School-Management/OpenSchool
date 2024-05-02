@@ -3,10 +3,5 @@ using SharedKernel.Contracts;
 
 namespace Identity.Application.IntegrationEvents.Events;
 
-public class SignInAtNewLocationIntegrationEvent : IntegrationEvent
-{
-    public TokenUser TokenUser { get; set; }
+public record SignInAtNewLocationIntegrationEvent(TokenUser TokenUser) : IntegrationEvent;
 
-    public string RequestId { get; set; }
-    
-}

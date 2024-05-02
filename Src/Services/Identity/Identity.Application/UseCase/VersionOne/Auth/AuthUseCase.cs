@@ -1,9 +1,12 @@
 using Identity.Application.Constants;
 using Identity.Application.DTOs.Auth;
+using Identity.Application.IntegrationEvents.Events;
+using Identity.Application.IntegrationEvents.Services;
 using Identity.Application.Properties;
 using Identity.Application.Repositories.Interfaces;
 using Identity.Domain.Entities;
 using MediatR;
+using MessageBroker.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using Microsoft.Net.Http.Headers;
@@ -25,16 +28,27 @@ public class AuthUseCase : IAuthUseCase
     private readonly ICurrentUser _currentUser;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IServiceProvider _provider;
+    private readonly IEventBus _eventBus;
+    private readonly IIdentityIntegrationEventService _identityIntegrationEventService;
+    
     public AuthUseCase(
         IAuthRepository authRepository, 
         IAuthService authService, 
+        IStringLocalizer<Resources> localizer,
+        ICurrentUser currentUser,
         IHttpContextAccessor httpContextAccessor,
-        IServiceProvider provider)
+        IServiceProvider provider,
+        IEventBus eventBus,
+        IIdentityIntegrationEventService identityIntegrationEventService)
     {
         _authRepository = authRepository;
         _authService = authService;
+        _localizer = localizer;
+        _currentUser = currentUser;
         _httpContextAccessor = httpContextAccessor;
         _provider = provider;
+        _eventBus = eventBus;
+        _identityIntegrationEventService = identityIntegrationEventService;
     }
 
     public async Task<AuthResponse> RefreshTokenAsync(RefreshTokenDto refreshTokenDto, CancellationToken cancellationToken = default)
@@ -68,13 +82,15 @@ public class AuthUseCase : IAuthUseCase
     
     public async Task<AuthResponse> SignInByPhone(SignInByPhoneDto signInByPhoneDto, CancellationToken cancellationToken = default)
     {
-        var tokenUser = await _authRepository.GetTokenUserByIdentityAsync(signInByPhoneDto.Phone, signInByPhoneDto.Password, cancellationToken);
-        if (tokenUser == null)
+        var tokenUser = await _authRepository.GetTokenUserByIdentityAsync(signInByPhoneDto.Phone, cancellationToken);
+        if (tokenUser == null || tokenUser.PasswordHash != signInByPhoneDto.Password.ToMD5())
         {
             throw new BadRequestException(_localizer["auth_sign_in_info_incorrect"].Value);
         }
+        
 
-        var isNewLoginAddress = await _authService.IsNewLoginAddressAsync(cancellationToken);
+        var requestValue = await _authService.GetRequestValueAsync(cancellationToken);
+        var isNewLoginAddress = await _authService.IsNewLoginAddressAsync(requestValue, cancellationToken);
         if (!isNewLoginAddress) // is not new login address
         {
             var accessTokenValue = await _authService.GenerateAccessTokenAsync(tokenUser, cancellationToken);
@@ -96,22 +112,60 @@ public class AuthUseCase : IAuthUseCase
             return new AuthResponse { AccessToken = accessTokenValue, RefreshToken = refreshTokenValue };
         }
         
+        // save sign in history
+        
         // Create otp, send otp for user by phone - OS-{0} là mã xác nhận Open School của bạn
         var otp = new OTP()
         {
             Otp = _authService.GenerateOtp(),
-            IsUsed = false, // OTP code has not been used - Mã OTP chưa được sử dụng
-            ExpiredDate = DateHelper.Now.AddMinutes(AuthConstant.MAX_TIME_OTP), // OTP expiration time - Thời gian hết hạn OTP
-            ProvidedDate = DateHelper.Now, // Time to generate OTP code - Thời điểm tạo mã OTP
+            IsUsed = false,
+            ExpiredDate = DateHelper.Now.AddMinutes(AuthConstant.MAX_TIME_OTP),
+            ProvidedDate = DateHelper.Now,
             Type = OtpType.Verify
         };
         await _authRepository.CreateOtpAsync(otp, cancellationToken);
         await _authRepository.UnitOfWork.CommitAsync(cancellationToken);
         
-        
         // EventBus: đẩy message lên rabbitMQ (save change signInHistory and send notification đi các máy đang đăng nhập)
+        var integrationEvent = new SignInAtNewLocationIntegrationEvent(tokenUser);
+        await _eventBus.PublishAsync(integrationEvent, cancellationToken);
         
         return new AuthResponse { IsVerifyCode = true };
+    }
+
+    public async Task<AuthResponse> VerifyOtpCodeAsync(string phone, string code, CancellationToken cancellationToken = default)
+    {
+        var tokenUser = await _authRepository.GetTokenUserByIdentityAsync(phone, cancellationToken);
+        if (tokenUser == null)
+        {
+            throw new BadRequestException(_localizer["auth_sign_in_info_incorrect"].Value);
+        }
+
+        var unexpiredOtp = await _authRepository.GetUnexpiredOtpAsync(tokenUser.Id, code, cancellationToken);
+        if (unexpiredOtp == null)
+        {
+            throw new BadRequestException(_localizer["auth_otp_invalid"].Value);
+        }
+        
+        await _authRepository.UsedOtpAsync(unexpiredOtp, cancellationToken);
+        
+        var accessTokenValue = await _authService.GenerateAccessTokenAsync(tokenUser, cancellationToken);
+        var refreshTokenValue = _authService.GenerateRefreshToken();
+            
+        // Save refresh token
+        var refreshToken = new RefreshToken
+        {
+            RefreshTokenValue = refreshTokenValue,
+            CurrentAccessToken = accessTokenValue,
+            OwnerId = tokenUser.Id,
+            ExpiredDate = DateHelper.Now.AddSeconds(AuthConstant.REFRESH_TOKEN_TIME),
+            CreatedBy = tokenUser.Id,
+        };
+        
+        await _authRepository.CreateOrUpdateRefreshTokenAsync(refreshToken, cancellationToken);
+        await _authRepository.UnitOfWork.CommitAsync(cancellationToken);
+
+        return new AuthResponse { AccessToken = accessTokenValue, RefreshToken = refreshTokenValue };
     }
     
 
@@ -150,22 +204,7 @@ public class AuthUseCase : IAuthUseCase
 
     public async Task<RequestValue> GetRequestInformationAsync(CancellationToken cancellationToken = default)
     {
-        var value = new RequestValue();
-        var httpRequest = _currentUser.Context.HttpContext.Request;
-        var header = httpRequest.Headers;
-        var ua = header[HeaderNames.UserAgent].ToString();
-        var c = Parser.GetDefault().Parse(ua);
-
-        value.Ip = AuthUtility.TryGetIP(httpRequest);
-        value.UA = ua;
-        value.OS = c.OS.Family + (!string.IsNullOrEmpty(c.OS.Major) ? $" {c.OS.Major}" : "") + (!string.IsNullOrEmpty(c.OS.Minor) ? $".{c.OS.Minor}" : "");
-        value.Browser = c.UA.Family + (!string.IsNullOrEmpty(c.UA.Major) ? $" {c.UA.Major}.{c.UA.Minor}" : "");
-        value.Device = c.Device.Family;
-        value.Origin = header[HeaderNames.Origin].ToString();
-        value.Time = DateHelper.Now.ToString();
-        value.IpInformation = await AuthUtility.GetIpInformationAsync(_provider, value.Ip);
-
-        return value;
+        return await _authService.GetRequestValueAsync(cancellationToken);
     }
 
     public async Task<IPagedList<SignInHistoryDto>> GetSignInHistoryPaging(PagingRequest pagingRequest, CancellationToken cancellationToken = default)
