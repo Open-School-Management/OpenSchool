@@ -46,17 +46,18 @@ public class CoreDbContext : DbContext, ICoreDbContext
 
     #region Implement UnitOfWork
 
-    public virtual async Task RollbackAsync(CancellationToken cancellationToken = default)
+    public new virtual Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        if (this.Database.CurrentTransaction is null)
-        {
-            return;
-        }
-            
+        ApplyAuditFieldsToModifiedEntities();
+        
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public virtual async Task RollbackAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
         await this.Database.RollbackTransactionAsync(cancellationToken);
     }
-        
-
+    
     public virtual void BeginTransaction()
     {
         if (this.Database.CurrentTransaction is null)
@@ -65,12 +66,10 @@ public class CoreDbContext : DbContext, ICoreDbContext
         }
     }
         
-    public virtual async Task CommitAsync(CancellationToken cancellationToken = default)
+    public virtual async Task CommitAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        ApplyAuditFieldsToModifiedEntities();
-        
         await this.SaveChangesAsync(cancellationToken);
-            
+        
         if (this.Database.CurrentTransaction is not null)
         {
             await this.Database.CommitTransactionAsync(cancellationToken);

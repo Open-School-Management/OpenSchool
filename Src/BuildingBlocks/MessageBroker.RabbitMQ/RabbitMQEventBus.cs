@@ -1,10 +1,7 @@
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using OpenTelemetry.Context.Propagation;
 using Polly.Retry;
 
 namespace MessageBroker.RabbitMQ;

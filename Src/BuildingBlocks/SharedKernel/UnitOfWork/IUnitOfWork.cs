@@ -2,9 +2,11 @@ namespace SharedKernel.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable
 {
-    Task CommitAsync(CancellationToken cancellationToken = default);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
+    
+    Task CommitAsync(CancellationToken cancellationToken = new CancellationToken());
 
-    Task RollbackAsync(CancellationToken cancellationToken = default);
+    Task RollbackAsync(CancellationToken cancellationToken = new CancellationToken());
 
     void BeginTransaction();
 }

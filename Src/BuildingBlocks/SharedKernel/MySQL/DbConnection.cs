@@ -340,7 +340,12 @@ public class DbConnection : IDbConnection
     {
         await CurrentTransaction.RollbackAsync(cancellationToken);
     }
-        
+
+    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task CommitAsync(CancellationToken cancellationToken = default)
     {
         await CurrentTransaction.CommitAsync(cancellationToken);
