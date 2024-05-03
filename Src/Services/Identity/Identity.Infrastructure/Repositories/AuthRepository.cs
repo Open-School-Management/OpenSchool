@@ -16,11 +16,11 @@ namespace Identity.Infrastructure.Repositories;
 
 public class AuthRepository : IAuthRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IdentityDbContext _context;
     private readonly ICurrentUser _currentUser;
     private readonly IServiceProvider _provider;
 
-    public AuthRepository(ApplicationDbContext context, ICurrentUser currentUser)
+    public AuthRepository(IdentityDbContext context, ICurrentUser currentUser)
     {
         _context = context;
         _currentUser = currentUser;

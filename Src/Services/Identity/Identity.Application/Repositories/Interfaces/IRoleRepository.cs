@@ -5,7 +5,7 @@ using SharedKernel.Contracts.Repositories;
 
 namespace Identity.Application.Repositories.Interfaces;
 
-public interface IRoleRepository : IWriteOnlyRepository<Role, Guid, IApplicationDbContext>
+public interface IRoleRepository : IWriteOnlyRepository<Role, Guid, IIdentityDbContext>
 {
     Task<RoleDto> CreateRoleAsync(Role role, CancellationToken cancellationToken = default);
 

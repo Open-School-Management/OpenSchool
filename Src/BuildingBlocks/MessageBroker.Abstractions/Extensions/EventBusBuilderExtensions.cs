@@ -37,8 +37,5 @@ public static class EventBusBuilderExtensions
 
         return eventBusBuilder;
         
-
-
-        return eventBusBuilder;
     }
 }

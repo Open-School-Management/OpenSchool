@@ -14,11 +14,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTOs\" />
-      <Folder Include="Entities\" />
-      <Folder Include="Persistence\" />
-      <Folder Include="Repositories\" />
-      <Folder Include="Services\" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\Logging\Logging.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\MessageBroker.RabbitMQ\MessageBroker.RabbitMQ.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\SharedKernel\SharedKernel.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\SignalR\SignalR.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Extensions\" />
     </ItemGroup>
 
 </Project>

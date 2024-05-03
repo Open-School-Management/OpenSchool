@@ -3,6 +3,7 @@ using Identity.Api.Configures;
 using Identity.Application;
 using Identity.Infrastructure;
 using Identity.Infrastructure.Persistence;
+using MessageBroker.RabbitMQ;
 using Microsoft.AspNetCore.HttpOverrides;
 using SharedKernel.Configures;
 using SharedKernel.Core;
@@ -49,7 +50,7 @@ try
     
     // Configure the HTTP request pipeline.
     var app = builder.Build();
-
+    
     // Pipelines
     if (app.Environment.IsDevelopment())
     {

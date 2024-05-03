@@ -19,8 +19,4 @@
       <ProjectReference Include="..\Identity.Infrastructure\Identity.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="IntegrationEvents\" />
-    </ItemGroup>
-
 </Project>

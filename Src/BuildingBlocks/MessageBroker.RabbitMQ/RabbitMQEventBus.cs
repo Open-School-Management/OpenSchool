@@ -24,7 +24,7 @@ public sealed class RabbitMQEventBus: IEventBus, IDisposable, IHostedService
     public RabbitMQEventBus(
         ILogger<RabbitMQEventBus> logger,
         IServiceProvider provider,
-        IOptions<EventBusOptions> options,
+        IOptions<RabbitMQClientSettings> options,
         IOptions<EventBusSubscriptionInfo> subscriptionOptions)
     {
         _logger = logger;

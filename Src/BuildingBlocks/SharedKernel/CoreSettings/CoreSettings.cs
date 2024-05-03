@@ -9,8 +9,6 @@ public static class CoreSettings
     public static Dictionary<string, string> ConnectionStrings { get; private set; }
 
     public static DefaultLoggingConfig DefaultLoggingConfig { get; private set; }
-
-    public static DefaultEmailConfig DefaultEmailConfig { get; private set; }
     
     public static DefaultCloudflareConfig DefaultCloudflareConfig { get; private set; }
     

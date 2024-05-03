@@ -12,13 +12,12 @@ public class IdentityIntegrationEventService : IIdentityIntegrationEventService,
     private volatile bool _disposedValue;
 
     private readonly IEventBus _eventBus;
-    private readonly ApplicationDbContext _context;
+    private readonly IdentityDbContext _context;
     private readonly IIntegrationEventLogService _integrationEventLogService;
     private readonly ILogger<IdentityIntegrationEventService> _logger;
     
-    
     public IdentityIntegrationEventService(IEventBus eventBus,
-        ApplicationDbContext context,
+        IdentityDbContext context,
         IIntegrationEventLogService integrationEventLogService,
         ILogger<IdentityIntegrationEventService> logger)
     {
