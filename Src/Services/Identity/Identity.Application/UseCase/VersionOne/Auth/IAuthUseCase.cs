@@ -1,6 +1,4 @@
 using Identity.Application.DTOs.Auth;
-using SharedKernel.Contracts;
-using SharedKernel.Domain;
 
 namespace Identity.Application.UseCase.VersionOne;
 

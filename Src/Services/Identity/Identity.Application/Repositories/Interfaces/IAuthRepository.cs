@@ -1,8 +1,4 @@
 using Identity.Application.DTOs.Auth;
-using Identity.Domain.Entities;
-using SharedKernel.Contracts;
-using SharedKernel.Domain;
-using SharedKernel.UnitOfWork;
 
 namespace Identity.Application.Repositories.Interfaces;
 

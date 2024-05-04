@@ -1,7 +1,3 @@
-using Identity.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using SharedKernel.EFCore;
-
 namespace Identity.Application.Persistence;
 
 public interface IIdentityDbContext : ICoreDbContext

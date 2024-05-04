@@ -48,8 +48,6 @@ public class CoreDbContext : DbContext, ICoreDbContext
 
     public new virtual Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        ApplyAuditFieldsToModifiedEntities();
-        
         return base.SaveChangesAsync(cancellationToken);
     }
 

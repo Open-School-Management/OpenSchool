@@ -1,6 +1,5 @@
-﻿namespace Notification.IntegrationEvents.Events;
+﻿using MessageBroker.Abstractions.Events;
 
-public class SendOtpSmsIntegrationEvent
-{
-    
-}
+namespace Notification.IntegrationEvents.Events;
+
+public record SendOtpSmsIntegrationEvent(string Phone, string Otp) : IntegrationEvent;

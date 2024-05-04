@@ -1,1 +1,16 @@
+global using System.Text;
+global using Caching;
+global using Identity.Application.Constants;
+global using Identity.Application.Repositories.Interfaces;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.IdentityModel.Tokens;
+global using Microsoft.Net.Http.Headers;
+global using SharedKernel.Auth;
+global using SharedKernel.Contracts;
+global using SharedKernel.Core;
+global using SharedKernel.Domain;
+global using SharedKernel.Libraries;
+global using UAParser;
+global using Utility = SharedKernel.Libraries.Utility;
 global using static SharedKernel.Contracts.Enum;

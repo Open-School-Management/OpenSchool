@@ -1,6 +1,8 @@
 using Identity.Application.IntegrationEvents.Services;
 using Identity.Application.Persistence;
 using Identity.Infrastructure.Persistence;
+using Identity.Infrastructure.Repositories;
+using Identity.Infrastructure.Services;
 using Identity.Infrastructure.Services.IntegrationEvents;
 using IntegrationEventLogs;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +25,7 @@ public static class ConfigureServices
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
         );
         
-        services.AddScoped<ApplicationDbContextSeed>();
+        services.AddScoped<IdentityDbContextSeed>();
         
         // Add the integration services that consume the DbContext
         services.AddTransient<IIntegrationEventLogService, IntegrationEventLogService<IdentityDbContext>>();
@@ -31,8 +33,10 @@ public static class ConfigureServices
         services.AddTransient<IIdentityIntegrationEventService, IdentityIntegrationEventService>();
         
         // Add Service
+        services.AddScoped<IAuthService, AuthService>();
         
         // Add DI Repositories
+        services.AddScoped<IAuthRepository, AuthRepository>();
         
 
         return services;

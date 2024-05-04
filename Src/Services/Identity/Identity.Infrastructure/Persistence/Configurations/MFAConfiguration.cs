@@ -15,7 +15,7 @@ public class MFAConfiguration : EntityAuditConfiguration<MFA>
         builder.Property(cd => cd.Type)
             .HasConversion(
                 v => v.ToString(), 
-                v => (MFAType)Enum.Parse(typeof(MFAType), v) 
+                v => (MFAType)System.Enum.Parse(typeof(MFAType), v) 
             );
     }
 }

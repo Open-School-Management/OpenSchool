@@ -1,33 +1,66 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Caching;
+using Microsoft.AspNetCore.HttpOverrides;
+using Notification.Extensions;
+using Serilog;
+using SharedKernel.Configures;
+using SharedKernel.Core;
+using SharedKernel.Filters;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
+var configuration = builder.Configuration;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-builder.Services.AddControllersWithViews();
-
-builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    builder.AddCoreWebApplication();
+    
+    // Core setting project
+    CoreSettings.SetJWTConfig(configuration);
+    CoreSettings.SetConnectionStrings(configuration);
+    
+    // Services
+    services.AddCoreServices(configuration);
+    
+    services.AddCoreAuthentication(builder.Configuration);
+    
+    services.AddCoreCaching(builder.Configuration);
+    
+    services.Configure<ForwardedHeadersOptions>(o => o.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto);
+    
+    services.AddCurrentUser();
+    
+    services.AddControllersWithViews(options =>
+    {
+        options.Filters.Add(new AccessTokenValidatorAsyncFilter());
+    });
+    
+    services.AddApplicationServices(configuration);
+    
+    // Configure the HTTP request pipeline.
+    var app = builder.Build();
+    
+    // Pipelines
+    app.UseCoreCors(configuration);
+
+    app.UseCoreWebApplication(app.Environment);
+    
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-app.UseRouting();
-app.UseEndpoints(endpoints =>
+catch (Exception ex)
 {
-    endpoints.MapControllers();
-});
+    string type = ex.GetType().Name;
+    if (type.Equals("StopTheHostException", StringComparison.Ordinal)) throw;
 
-
-app.Run();
-
+    Log.Fatal(ex, $"Unhandled exception: {ex.Message}");
+}
+finally
+{
+    Log.Information($"Shutdown {builder.Environment.ApplicationName} complete");
+    Log.CloseAndFlush();
+}

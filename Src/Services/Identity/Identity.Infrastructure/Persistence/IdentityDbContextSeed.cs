@@ -3,19 +3,17 @@ using Identity.Domain.Entities;
 using Identity.Infrastructure.Persistence.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Driver.Linq;
 using Serilog;
 using SharedKernel.Application;
-using SharedKernel.Libraries;
+using Enum = System.Enum;
 
 namespace Identity.Infrastructure.Persistence;
 
-public class ApplicationDbContextSeed
+public class IdentityDbContextSeed
 {
     private readonly IdentityDbContext _context;
 
-    public ApplicationDbContextSeed(IdentityDbContext context)
+    public IdentityDbContextSeed(IdentityDbContext context)
     {
         _context = context;
     }
@@ -161,7 +159,7 @@ public class ApplicationDbContextSeed
         var adminRole = await _context.Roles.SingleOrDefaultAsync(r => r.Code == RoleConstant.Admin);
         var currentPermissions = await _context.Permissions.ToListAsync();
 
-        var currentExponents = Enum.GetValues(typeof(ActionExponent)).Cast<ActionExponent>().ToList();
+        var currentExponents = System.Enum.GetValues(typeof(ActionExponent)).Cast<ActionExponent>().ToList();
         var existingExponents = currentPermissions.Select(p => (ActionExponent)p.Exponent).ToList();
 
         if (existingExponents.OrderBy(x => x).SequenceEqual(currentExponents.OrderBy(x => x)))

@@ -1,8 +1,5 @@
 using Identity.Application.DTOs.User;
 using Identity.Application.Persistence;
-using Identity.Domain.Entities;
-using SharedKernel.Contracts;
-using SharedKernel.Contracts.Repositories;
 
 namespace Identity.Application.Repositories.Interfaces;
 

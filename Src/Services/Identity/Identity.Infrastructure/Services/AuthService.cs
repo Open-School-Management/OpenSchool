@@ -1,20 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
-using Caching;
-using Identity.Application.Constants;
-using Identity.Application.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
-using SharedKernel.Auth;
-using SharedKernel.Contracts;
-using SharedKernel.Core;
-using SharedKernel.Domain;
-using SharedKernel.Libraries;
-using UAParser;
-using Utility = SharedKernel.Libraries.Utility;
 
 namespace Identity.Infrastructure.Services;
 

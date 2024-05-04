@@ -101,7 +101,7 @@ public static class Default
     public static IEnumerable<Permission> GetPermissions()
     {
         var permissions = new List<Permission>();
-        foreach (ActionExponent action in Enum.GetValues(typeof(ActionExponent)))
+        foreach (ActionExponent action in System.Enum.GetValues(typeof(ActionExponent)))
         {
             var code = action.ToString().ToSnakeCaseUpper();
             var name = action.ToString().PascalToStandard();

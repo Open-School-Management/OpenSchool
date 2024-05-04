@@ -1,8 +1,4 @@
 using Identity.Application.DTOs.Cpanel;
-using Identity.Application.DTOs.Role.Responses;
-using Identity.Application.DTOs.User;
-using Identity.Domain.Entities;
-using SharedKernel.Contracts;
 
 namespace Identity.Application.Repositories.Interfaces;
 

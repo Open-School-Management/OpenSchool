@@ -1,7 +1,6 @@
 using Identity.Application.DTOs.Role.Responses;
 using Identity.Application.Persistence;
-using Identity.Domain.Entities;
-using SharedKernel.Contracts.Repositories;
+
 
 namespace Identity.Application.Repositories.Interfaces;
 

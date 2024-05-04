@@ -68,7 +68,7 @@ public class UserConfiguration : EntityAuditConfiguration<User>
         builder.Property(cd => cd.Gender)
             .HasConversion(
                 v => v.ToString(), 
-                v => (GenderType)Enum.Parse(typeof(GenderType), v) 
+                v => (GenderType)System.Enum.Parse(typeof(GenderType), v) 
             );
         
         #endregion

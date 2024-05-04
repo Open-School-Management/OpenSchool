@@ -1,6 +1,12 @@
-﻿namespace Notification.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
+using SharedKernel.EFCore;
 
-public class NotificationDbContext
+namespace Notification.Persistence;
+
+public class NotificationDbContext : CoreDbContext
 {
-    
+    public NotificationDbContext(DbContextOptions options) : base(options)
+    {
+        
+    }
 }

@@ -4,19 +4,6 @@ using Identity.Application.IntegrationEvents.Events;
 using Identity.Application.IntegrationEvents.Services;
 using Identity.Application.Properties;
 using Identity.Application.Repositories.Interfaces;
-using Identity.Domain.Entities;
-using MediatR;
-using MessageBroker.Abstractions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Localization;
-using Microsoft.Net.Http.Headers;
-using SharedKernel.Auth;
-using SharedKernel.Contracts;
-using SharedKernel.Core;
-using SharedKernel.Domain;
-using SharedKernel.Libraries;
-using SharedKernel.Runtime.Exceptions;
-using UAParser;
 
 namespace Identity.Application.UseCase.VersionOne;
 
@@ -82,35 +69,34 @@ public class AuthUseCase : IAuthUseCase
     
     public async Task<AuthResponse> SignInByPhone(SignInByPhoneDto signInByPhoneDto, CancellationToken cancellationToken = default)
     {
-        var tokenUser = await _authRepository.GetTokenUserByIdentityAsync(signInByPhoneDto.Phone, cancellationToken);
-        if (tokenUser == null || tokenUser.PasswordHash != signInByPhoneDto.Password.ToMD5())
-        {
-            throw new BadRequestException(_localizer["auth_sign_in_info_incorrect"].Value);
-        }
-        
-
-        var requestValue = await _authService.GetRequestValueAsync(cancellationToken);
-        var isNewLoginAddress = await _authService.IsNewLoginAddressAsync(requestValue, cancellationToken);
-        if (!isNewLoginAddress) // is not new login address
-        {
-            var accessTokenValue = await _authService.GenerateAccessTokenAsync(tokenUser, cancellationToken);
-            var refreshTokenValue = _authService.GenerateRefreshToken();
-            
-            // Save refresh token
-            var refreshToken = new RefreshToken
-            {
-                RefreshTokenValue = refreshTokenValue,
-                CurrentAccessToken = accessTokenValue,
-                OwnerId = tokenUser.Id,
-                ExpiredDate = DateHelper.Now.AddSeconds(AuthConstant.REFRESH_TOKEN_TIME),
-                CreatedBy = tokenUser.Id,
-            };
-        
-            await _authRepository.CreateOrUpdateRefreshTokenAsync(refreshToken, cancellationToken);
-            await _authRepository.UnitOfWork.CommitAsync(cancellationToken);
-
-            return new AuthResponse { AccessToken = accessTokenValue, RefreshToken = refreshTokenValue };
-        }
+        // var tokenUser = await _authRepository.GetTokenUserByIdentityAsync(signInByPhoneDto.Phone, cancellationToken);
+        // if (tokenUser == null || tokenUser.PasswordHash != signInByPhoneDto.Password.ToMD5())
+        // {
+        //     throw new BadRequestException(_localizer["auth_sign_in_info_incorrect"].Value);
+        // }
+        //
+        // var requestValue = await _authService.GetRequestValueAsync(cancellationToken);
+        // var isNewLoginAddress = await _authService.IsNewLoginAddressAsync(requestValue, cancellationToken);
+        // if (!isNewLoginAddress) // is not new login address
+        // {
+        //     var accessTokenValue = await _authService.GenerateAccessTokenAsync(tokenUser, cancellationToken);
+        //     var refreshTokenValue = _authService.GenerateRefreshToken();
+        //     
+        //     // Save refresh token
+        //     var refreshToken = new RefreshToken
+        //     {
+        //         RefreshTokenValue = refreshTokenValue,
+        //         CurrentAccessToken = accessTokenValue,
+        //         OwnerId = tokenUser.Id,
+        //         ExpiredDate = DateHelper.Now.AddSeconds(AuthConstant.REFRESH_TOKEN_TIME),
+        //         CreatedBy = tokenUser.Id,
+        //     };
+        //
+        //     await _authRepository.CreateOrUpdateRefreshTokenAsync(refreshToken, cancellationToken);
+        //     await _authRepository.UnitOfWork.CommitAsync(cancellationToken);
+        //
+        //     return new AuthResponse { AccessToken = accessTokenValue, RefreshToken = refreshTokenValue };
+        // }
         
         // save sign in history
         
@@ -123,12 +109,15 @@ public class AuthUseCase : IAuthUseCase
             ProvidedDate = DateHelper.Now,
             Type = OtpType.Verify
         };
-        await _authRepository.CreateOtpAsync(otp, cancellationToken);
-        await _authRepository.UnitOfWork.CommitAsync(cancellationToken);
+        // await _authRepository.CreateOtpAsync(otp, cancellationToken);
+        // await _authRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+        
+        var sendOtpSmsIntegrationEvent = new SendOtpSmsIntegrationEvent(signInByPhoneDto.Phone, otp.Otp);
+        await _eventBus.PublishAsync(sendOtpSmsIntegrationEvent, cancellationToken);
         
         // EventBus: đẩy message lên rabbitMQ (save change signInHistory and send notification đi các máy đang đăng nhập)
-        var integrationEvent = new SignInAtNewLocationIntegrationEvent(tokenUser);
-        await _eventBus.PublishAsync(integrationEvent, cancellationToken);
+        // var signInAtNewLocationIntegrationEvent = new SignInAtNewLocationIntegrationEvent(tokenUser);
+        // await _eventBus.PublishAsync(signInAtNewLocationIntegrationEvent, cancellationToken);
         
         return new AuthResponse { IsVerifyCode = true };
     }

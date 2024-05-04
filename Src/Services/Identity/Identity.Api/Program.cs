@@ -64,7 +64,7 @@ try
     // Initialise and seed database
     using (var scope = app.Services.CreateScope())
     {
-        var contextSeed = scope.ServiceProvider.GetRequiredService<ApplicationDbContextSeed>();
+        var contextSeed = scope.ServiceProvider.GetRequiredService<IdentityDbContextSeed>();
         await contextSeed.InitialiseAsync();
         await contextSeed.SeedAsync();
         await contextSeed.SyncPermissionsBasedOnChanges();
