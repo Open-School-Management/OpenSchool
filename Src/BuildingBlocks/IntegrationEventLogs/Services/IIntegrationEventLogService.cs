@@ -21,6 +21,8 @@ public interface IIntegrationEventLogService
     /// <returns></returns>
     Task SaveEventAsync(IntegrationEvent @event, IDbContextTransaction transaction, CancellationToken cancellationToken = default);
     
+    Task SaveEventsAsync(List<IntegrationEvent> @events, IDbContextTransaction transaction, CancellationToken cancellationToken = default);
+    
     /// <summary>
     /// Mark Integration event as published
     /// </summary>

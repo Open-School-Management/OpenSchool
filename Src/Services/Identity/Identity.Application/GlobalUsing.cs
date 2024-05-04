@@ -2,7 +2,6 @@ global using static SharedKernel.Contracts.Enum;
 global using Identity.Domain.Entities;
 global using Microsoft.EntityFrameworkCore;
 global using SharedKernel.EFCore;
-
 global using SharedKernel.Contracts;
 global using SharedKernel.Contracts.Repositories;
 global using SharedKernel.Domain;

@@ -27,7 +27,29 @@ public class IdentityIntegrationEventService : IIdentityIntegrationEventService,
         _logger = logger;
     }
     
-    public async Task SaveEventAndIdentityContextChangesAsync(IntegrationEvent evt, CancellationToken cancellationToken = default)
+    public async Task SaveEventAndIdentityContextChangesAsync(List<IntegrationEvent> events, CancellationToken cancellationToken = default)
+    {
+        _logger.LogInformation("IdentityIntegrationEventService - Saving changes and integrationEvent: {IntegrationEventId}", string.Join(",", events));
+
+        //Use of an EF Core resiliency strategy when using multiple DbContexts within an explicit BeginTransaction():
+        //See: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency            
+        await ResilientTransaction.New(_context).ExecuteAsync(async () =>
+        {
+            // Achieving atomicity between original catalog database operation and the IntegrationEventLog thanks to a local transaction
+            await _context.SaveChangesAsync(cancellationToken);
+            await _integrationEventLogService.SaveEventsAsync(events, _context.Database.CurrentTransaction, cancellationToken);
+        });
+    }
+
+    public async Task PublishThroughEventBusAsync(List<IntegrationEvent> events, CancellationToken cancellationToken = default)
+    {
+        foreach (var @event in events)
+        {
+           await PublishThroughEventBusAsync(@event, cancellationToken);
+        }
+    }
+    
+    public async Task PublishThroughEventBusAsync(IntegrationEvent evt, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -42,20 +64,6 @@ public class IdentityIntegrationEventService : IIdentityIntegrationEventService,
             _logger.LogError(ex, "Error Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})", evt.Id, evt);
             await _integrationEventLogService.MarkEventAsFailedAsync(evt.Id, cancellationToken);
         }
-    }
-
-    public async Task PublishThroughEventBusAsync(IntegrationEvent evt, CancellationToken cancellationToken = default)
-    {
-        _logger.LogInformation("CatalogIntegrationEventService - Saving changes and integrationEvent: {IntegrationEventId}", evt.Id);
-
-        //Use of an EF Core resiliency strategy when using multiple DbContexts within an explicit BeginTransaction():
-        //See: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency            
-        await ResilientTransaction.New(_context).ExecuteAsync(async () =>
-        {
-            // Achieving atomicity between original catalog database operation and the IntegrationEventLog thanks to a local transaction
-            await _context.SaveChangesAsync(cancellationToken);
-            await _integrationEventLogService.SaveEventAsync(evt, _context.Database.CurrentTransaction, cancellationToken);
-        });
     }
 
     private void Dispose(bool disposing)

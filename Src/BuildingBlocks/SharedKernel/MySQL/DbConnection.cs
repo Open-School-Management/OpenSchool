@@ -341,6 +341,11 @@ public class DbConnection : IDbConnection
         await CurrentTransaction.RollbackAsync(cancellationToken);
     }
 
+    public Task<int> SaveChangesAsync(bool applyAuditFields, CancellationToken cancellationToken = new CancellationToken())
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         throw new NotImplementedException();
@@ -353,7 +358,7 @@ public class DbConnection : IDbConnection
         
     public void BeginTransaction()
     {
-           
+        throw new NotImplementedException();
     }
     #endregion
 

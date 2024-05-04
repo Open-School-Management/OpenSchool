@@ -32,14 +32,20 @@ public class IntegrationEventLogService<TContext> : IIntegrationEventLogService,
 
         return [];
     }
+    
 
     public async Task SaveEventAsync(IntegrationEvent @event, IDbContextTransaction transaction, CancellationToken cancellationToken = default)
     {
+        await SaveEventsAsync(new List<IntegrationEvent>() { @event }, transaction, cancellationToken);
+    }
+
+    public async Task SaveEventsAsync(List<IntegrationEvent> @events, IDbContextTransaction transaction, CancellationToken cancellationToken = default)
+    {
         if (transaction == null) throw new ArgumentNullException(nameof(transaction));
         
-        var eventLogEntry = new IntegrationEventLogEntry(@event, transaction.TransactionId);
+        var eventLogEntries= @events.Select(@e => new IntegrationEventLogEntry(@e, transaction.TransactionId));
         await _context.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken);
-        _context.Set<IntegrationEventLogEntry>().Add(eventLogEntry);
+        await _context.Set<IntegrationEventLogEntry>().AddRangeAsync(eventLogEntries, cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);
     }
