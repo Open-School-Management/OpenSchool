@@ -55,14 +55,14 @@ public class IdentityIntegrationEventService : IIdentityIntegrationEventService,
         {
             _logger.LogInformation("Publishing integration event: {IntegrationEventId_published} - ({@IntegrationEvent})", evt.Id, evt);
 
-            await _integrationEventLogService.MarkEventAsInProgressAsync(evt.Id, cancellationToken);
+            // await _integrationEventLogService.MarkEventAsInProgressAsync(evt.Id, cancellationToken);
             await _eventBus.PublishAsync(evt, cancellationToken);
-            await _integrationEventLogService.MarkEventAsPublishedAsync(evt.Id, cancellationToken);
+            // await _integrationEventLogService.MarkEventAsPublishedAsync(evt.Id, cancellationToken);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})", evt.Id, evt);
-            await _integrationEventLogService.MarkEventAsFailedAsync(evt.Id, cancellationToken);
+            // await _integrationEventLogService.MarkEventAsFailedAsync(evt.Id, cancellationToken);
         }
     }
 

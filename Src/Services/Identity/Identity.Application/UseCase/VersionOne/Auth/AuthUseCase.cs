@@ -4,6 +4,7 @@ using Identity.Application.IntegrationEvents.Events;
 using Identity.Application.IntegrationEvents.Services;
 using Identity.Application.Properties;
 using Identity.Application.Repositories.Interfaces;
+using MessageBroker.Abstractions.Events;
 
 namespace Identity.Application.UseCase.VersionOne;
 
@@ -97,10 +98,7 @@ public class AuthUseCase : IAuthUseCase
         //
         //     return new AuthResponse { AccessToken = accessTokenValue, RefreshToken = refreshTokenValue };
         // }
-        
-        // save sign in history
-        
-        // Create otp, send otp for user by phone - OS-{0} là mã xác nhận Open School của bạn
+        //
         var otp = new OTP()
         {
             Otp = _authService.GenerateOtp(),
@@ -110,14 +108,13 @@ public class AuthUseCase : IAuthUseCase
             Type = OtpType.Verify
         };
         // await _authRepository.CreateOtpAsync(otp, cancellationToken);
-        // await _authRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
         
         var sendOtpSmsIntegrationEvent = new SendOtpSmsIntegrationEvent(signInByPhoneDto.Phone, otp.Otp);
-        await _eventBus.PublishAsync(sendOtpSmsIntegrationEvent, cancellationToken);
-        
-        // EventBus: đẩy message lên rabbitMQ (save change signInHistory and send notification đi các máy đang đăng nhập)
-        // var signInAtNewLocationIntegrationEvent = new SignInAtNewLocationIntegrationEvent(tokenUser);
-        // await _eventBus.PublishAsync(signInAtNewLocationIntegrationEvent, cancellationToken);
+        var signInAtNewLocationIntegrationEvent = new SignInAtNewLocationIntegrationEvent(new TokenUser());
+
+        var events = new List<IntegrationEvent> { sendOtpSmsIntegrationEvent, signInAtNewLocationIntegrationEvent };
+        // await _identityIntegrationEventService.SaveEventAndIdentityContextChangesAsync(events, cancellationToken);
+        await _identityIntegrationEventService.PublishThroughEventBusAsync(events, cancellationToken);
         
         return new AuthResponse { IsVerifyCode = true };
     }

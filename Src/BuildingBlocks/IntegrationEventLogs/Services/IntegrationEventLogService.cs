@@ -86,8 +86,6 @@ public class IntegrationEventLogService<TContext> : IIntegrationEventLogService,
             {
                 _context.Dispose();
             }
-
-
             _disposedValue = true;
         }
     }

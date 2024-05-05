@@ -36,9 +36,6 @@ public sealed class RabbitMQEventBus: IEventBus, IDisposable, IHostedService
     {
         var routingKey = @event.GetType().Name;
         
-        _logger.LogWarning($"------------------------{routingKey}");
-
-
         using var channel = _rabbitMqConnection.CreateModel() ?? throw new InvalidOperationException("RabbitMQ connection is not open ...");
         channel.ExchangeDeclare(exchange: ExchangeName, type: "direct");
         var body = SerializeMessage(@event);
@@ -127,7 +124,6 @@ public sealed class RabbitMQEventBus: IEventBus, IDisposable, IHostedService
 
     private async Task OnMessageReceivedAsync(object sender, BasicDeliverEventArgs eventArgs)
     {
-        _logger.LogWarning("==== DANG XU LY NE ====");
         var eventName = eventArgs.RoutingKey;
         var message = Encoding.UTF8.GetString(eventArgs.Body.Span);
         

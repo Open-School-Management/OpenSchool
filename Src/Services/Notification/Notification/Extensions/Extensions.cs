@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Notification.IntegrationEvents.EventHandling;
 using Notification.IntegrationEvents.Events;
+using Notification.Services;
+using Notification.TwilioHelper;
 using SharedKernel.Configures;
 using SharedKernel.Middlewares;
 using ZymLabs.NSwag.FluentValidation;
@@ -128,7 +130,6 @@ public static class Extensions
             app.UseSwaggerUI();
         }
         
-        
         app.UseCoreLocalization();
         app.UseCoreHandlerException();
         app.UseIpRateLimiting();
@@ -149,6 +150,10 @@ public static class Extensions
     {
         services.AddRabbitMqEventBus(configuration)
             .AddSubscription<SendOtpSmsIntegrationEvent, SendOtpSmsIntegrationEventHandler>();
+
+        services.AddTwilio(configuration);
+
+        services.AddSingleton<ISendSmsService, SendSmsService>();
         
         return services;
     }
