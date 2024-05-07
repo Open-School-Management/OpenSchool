@@ -43,7 +43,7 @@ public class AuthRepository : IAuthRepository
             .FirstOrDefaultAsync(rt => 
                     rt.RefreshTokenValue.Equals(value)  
                     && rt.OwnerId.Equals(userId) 
-                    && rt.ExpiredDate >= DateHelper.Now, 
+                    && rt.ExpirationDate >= DateHelper.Now, 
                 cancellationToken);
         
         return refreshToken != null;
@@ -62,7 +62,7 @@ public class AuthRepository : IAuthRepository
         {
             existingRefreshToken.RefreshTokenValue = refreshToken.RefreshTokenValue;
             existingRefreshToken.CurrentAccessToken = refreshToken.CurrentAccessToken;
-            existingRefreshToken.ExpiredDate = refreshToken.ExpiredDate;
+            existingRefreshToken.ExpirationDate = refreshToken.ExpirationDate;
             
             _context.RefreshTokens.Update(existingRefreshToken);
         }

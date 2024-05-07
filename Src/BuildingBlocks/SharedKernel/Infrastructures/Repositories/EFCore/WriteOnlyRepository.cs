@@ -1,4 +1,5 @@
 using Caching;
+using Caching.Sequence;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Auth;
 using SharedKernel.Contracts;

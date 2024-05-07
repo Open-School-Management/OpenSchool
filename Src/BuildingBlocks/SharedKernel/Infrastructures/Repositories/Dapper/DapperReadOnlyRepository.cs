@@ -1,4 +1,5 @@
 using Caching;
+using Caching.Sequence;
 using MassTransit.Internals;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;

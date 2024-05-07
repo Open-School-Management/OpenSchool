@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using Serilog;
 using SharedKernel.Auth;
-using SharedKernel.Contracts;
 
 namespace SignalR;
 

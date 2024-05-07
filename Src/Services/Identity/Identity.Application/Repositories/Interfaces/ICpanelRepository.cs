@@ -19,8 +19,6 @@ public interface ICpanelRepository
     Task<List<CpanelAccountDto>> GetAccountsByRoleIdAsync(Guid roleId, CancellationToken cancellationToken = default);
 
     Task<IPagedList<CpanelAccountDto>> GetAccountsPagingAsync(PagingRequest request, CancellationToken cancellationToken = default);
-    
-    Task<List<CpanelRoleDto>> GetRolesAsync(CancellationToken cancellationToken = default);
 
     Task<List<CpanelPermissionDto>> GetPermissionByExponentsAsync(List<ActionExponent> exponents, CancellationToken cancellationToken = default);
 

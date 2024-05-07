@@ -1,4 +1,5 @@
 using System.Net;
+using Core.Security.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

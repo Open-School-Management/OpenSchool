@@ -1,4 +1,5 @@
 using Caching;
+using Caching.Sequence;
 using MassTransit.Internals;
 using Microsoft.Extensions.Localization;
 using MySqlConnector;
@@ -63,7 +64,6 @@ public class DapperWriteOnlyRepository<TEntity, TKey> : IDapperWriteOnlyReposito
         var columnParams = new List<string>();
         var ignoreFields = new string[]
         {
-            nameof(IDomainEntity.DomainEvents),
             nameof(EntityBase<TKey>.Id),
             nameof(EntityAuditBase<TKey>.CreatedDate),
             nameof(EntityAuditBase<TKey>.CreatedBy),

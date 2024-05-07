@@ -104,12 +104,12 @@
 
     <ItemGroup>
       <Folder Include="ApiGateways\" />
-      <Folder Include="Infrastructures\Extensions\" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Caching\Caching.csproj" />
-      <ProjectReference Include="..\Logging\Logging.csproj" />
+      <ProjectReference Include="..\Core.Caching\Core.Caching.csproj" />
+      <ProjectReference Include="..\Core.Logging\Core.Logging.csproj" />
+      <ProjectReference Include="..\Core.Security\Core.Security.csproj" />
     </ItemGroup>
 
     <ItemGroup>

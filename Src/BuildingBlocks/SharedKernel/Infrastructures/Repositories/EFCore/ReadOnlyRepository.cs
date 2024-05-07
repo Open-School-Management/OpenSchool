@@ -1,18 +1,18 @@
 using System.Linq.Expressions;
 using Caching;
+using Caching.Sequence;
 using MassTransit.Internals;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Auth;
 using SharedKernel.Contracts;
 using SharedKernel.Contracts.Repositories;
 using SharedKernel.Domain;
-using SharedKernel.EFCore;
 
 namespace SharedKernel.Infrastructures;
 
 public class ReadOnlyRepository<TEntity, TKey, TDbContext> : IReadOnlyRepository<TEntity, TKey, TDbContext>
     where TEntity :  EntityBase<TKey>
-    where TDbContext : CoreDbContext
+    where TDbContext : DbContext
 {
     protected readonly TDbContext _context;
     protected readonly ICurrentUser _currentUser;

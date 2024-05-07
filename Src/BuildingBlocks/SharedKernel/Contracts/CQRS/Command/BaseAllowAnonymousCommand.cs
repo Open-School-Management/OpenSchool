@@ -1,6 +1,6 @@
-﻿using MediatR;
-using SharedKernel.Libraries;
-using static SharedKernel.Contracts.Enum;
+﻿using Core.Security.Attributes;
+using MediatR;
+using static Core.Security.Enums.SecurityEnum;
 
 namespace SharedKernel.Contracts;
 

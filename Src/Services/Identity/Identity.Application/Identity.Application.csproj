@@ -7,13 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\BuildingBlocks\Caching\Caching.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\Core.Caching\Core.Caching.csproj" />
       <ProjectReference Include="..\..\..\BuildingBlocks\IntegrationEventLogs\IntegrationEventLogs.csproj" />
-      <ProjectReference Include="..\..\..\BuildingBlocks\Logging\Logging.csproj" />
       <ProjectReference Include="..\..\..\BuildingBlocks\MessageBroker.Abstractions\MessageBroker.Abstractions.csproj" />
       <ProjectReference Include="..\..\..\BuildingBlocks\MessageBroker.RabbitMQ\MessageBroker.RabbitMQ.csproj" />
       <ProjectReference Include="..\..\..\BuildingBlocks\SharedKernel\SharedKernel.csproj" />
       <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\Auth\Command\" />
+      <Folder Include="Features\Auth\DTOs\" />
     </ItemGroup>
     
 

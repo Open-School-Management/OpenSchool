@@ -59,7 +59,7 @@ public class AuthUseCase : IAuthUseCase
             RefreshTokenValue = refreshTokenDto.RefreshToken,
             CurrentAccessToken= currentAccessToken,
             OwnerId= refreshTokenDto.UserId,
-            ExpiredDate = DateHelper.Now.AddSeconds(AuthConstant.REFRESH_TOKEN_TIME)
+            ExpirationDate = DateHelper.Now.AddSeconds(AuthConstant.REFRESH_TOKEN_TIME)
         };
 
         await _authRepository.CreateOrUpdateRefreshTokenAsync(refreshToken, cancellationToken);
@@ -144,7 +144,7 @@ public class AuthUseCase : IAuthUseCase
             RefreshTokenValue = refreshTokenValue,
             CurrentAccessToken = accessTokenValue,
             OwnerId = tokenUser.Id,
-            ExpiredDate = DateHelper.Now.AddSeconds(AuthConstant.REFRESH_TOKEN_TIME),
+            ExpirationDate = DateHelper.Now.AddSeconds(AuthConstant.REFRESH_TOKEN_TIME),
             CreatedBy = tokenUser.Id,
         };
         
