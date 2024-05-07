@@ -2,7 +2,6 @@
 {
     public static class ClaimConstant
     {
-        public const string TENANT_ID = "tenant_id";
         public const string USER_ID = "user_id";
         public const string USERNAME = "username";
         public const string ROLES = "roles";

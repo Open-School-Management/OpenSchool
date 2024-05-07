@@ -1,4 +1,6 @@
 
+using Core.Security.Enums;
+
 namespace Identity.Domain.Entities;
 
 [Table(TableName.User)]
@@ -27,6 +29,8 @@ public class User : EntityAuditBase
     public DateTime DateOfBirth { get; set; }
 
     public GenderType Gender { get; set; }
+    
+    public AuthenticatorType AuthenticatorType { get; set; }
     
     #region Navigations
     

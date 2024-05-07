@@ -4,12 +4,11 @@ using Identity.Domain.Entities;
 using Identity.Infrastructure.Extensions;
 using IntegrationEventLogs;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel.Domain;
-using SharedKernel.EFCore;
+using SharedKernel.EntityFrameworkCore.DbContext;
 
 namespace Identity.Infrastructure.Persistence;
 
-public class IdentityDbContext : CoreDbContext, IIdentityDbContext
+public class IdentityDbContext : BaseDbContext, IIdentityDbContext
 {
     public IdentityDbContext(DbContextOptions<IdentityDbContext> options) : base(options)
     {

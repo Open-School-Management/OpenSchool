@@ -1,39 +1,22 @@
-﻿using SharedKernel.Libraries;
-
-namespace SharedKernel.Contracts;
+﻿namespace SharedKernel.Contracts;
 
 public class Filter
 {
-    public List<Field> Fields { get; set; }
+    public string Field { get; set; }
+    public string Operator { get; set; }
+    public string? Value { get; set; }
+    public string? Logic { get; set; }
+    public IEnumerable<Filter>? Filters { get; set; }
 
-    private string _formula { get; set; }
-
-    public string Formula
+    public Filter()
     {
-        get
-        {
-            if (string.IsNullOrEmpty(_formula))
-            {
-                BuildFormula();
-            }
-            return StringHelper.RemoveExtraWhitespace(_formula);
-        }
-        set
-        {
-            _formula = value;
-        }
+        Field = string.Empty;
+        Operator = string.Empty;
     }
 
-    private void BuildFormula()
+    public Filter(string field, string @operator)
     {
-        if (Fields != null && Fields.Any())
-        {
-            var indexs = new List<string>();
-            for (int i = 0; i < Fields.Count; i++)
-            {
-                indexs.Add("{" + i + "}");
-            }
-            _formula = string.Join(" AND ", indexs.ToArray());
-        }
+        Field = field;
+        Operator = @operator;
     }
 }

@@ -1,4 +1,5 @@
-using Caching;
+using Caching.Extensions;
+using Core.Security.Filters;
 using Identity.Api.Configures;
 using Identity.Application;
 using Identity.Infrastructure;
@@ -7,7 +8,6 @@ using MessageBroker.RabbitMQ;
 using Microsoft.AspNetCore.HttpOverrides;
 using SharedKernel.Configures;
 using SharedKernel.Core;
-using SharedKernel.Filters;
 
 
 Log.Logger = new LoggerConfiguration()

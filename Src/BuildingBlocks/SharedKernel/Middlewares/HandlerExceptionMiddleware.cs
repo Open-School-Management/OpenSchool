@@ -80,24 +80,10 @@ public class HandlerExceptionMiddleware
                     x => x.Key,
                     x => string.Join("; ", x.Select(y => y.ErrorMessage))
                 );
-
-            var validateResult = new ValidateResult();
-
-            foreach (var error in errors)
-            {
-                var validateField = new ValidateField
-                {
-                    FieldName = error.Key,
-                    Code = ValidateCode.Required,
-                    ErrorMessage = error.Value
-                };
-
-                validateResult.ValidateFields.Add(validateField);
-            }
-
+            
             response.Error = new Error(
                 HttpStatusCode.BadRequest,
-                JsonConvert.SerializeObject(validateResult),
+                JsonConvert.SerializeObject(errors),
                 "BAD_REQUEST");
         }
         // Unknown exception

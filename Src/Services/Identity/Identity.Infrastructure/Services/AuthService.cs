@@ -1,26 +1,29 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Caching.Enums;
+using Caching.Sequence;
+using Core.Security.Constants;
+using Core.Security.Models;
+using Core.Security.Services.Auth;
+using Core.Security.Utilities;
 
 namespace Identity.Infrastructure.Services;
 
 public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
-    private readonly IConfiguration _configuration;
     private readonly ISequenceCaching _caching;
     private readonly ICurrentUser _currentUser;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IServiceProvider _provider;
     public AuthService(
         IAuthRepository authRepository,
-        IConfiguration configuration,
         ISequenceCaching caching,
         ICurrentUser currentUser,
         IHttpContextAccessor httpContextAccessor,
         IServiceProvider provider)
     {
         _authRepository = authRepository;
-        _configuration = configuration;
         _caching = caching;
         _currentUser = currentUser;
         _httpContextAccessor = httpContextAccessor;
@@ -59,7 +62,7 @@ public class AuthService : IAuthService
         claims.Add(new Claim(ClaimConstant.USERNAME, token.Username));
         claims.Add(new Claim(ClaimConstant.ROLES, string.Join(",", token.RoleNames)));
         claims.Add(new Claim(ClaimConstant.PERMISSION, token.Permission));
-        claims.Add(new Claim(ClaimConstant.CREATE_AT, token.CreatedDate.ToString("MM/dd/yyyy HH:mm:ss")));
+        claims.Add(new Claim(ClaimConstant.CREATE_AT, DateHelper.Now.ToString("MM/dd/yyyy HH:mm:ss")));
         claims.Add(new Claim(ClaimConstant.AUTHOR, "Đỗ Chí Hùng"));
         claims.Add(new Claim(ClaimConstant.ORGANIZATION, "Open-School Microservices"));
         claims.Add(new Claim(ClaimConstant.AUTHORS_MESSAGE, "Contact for work: 0976580418; Facebook: https://www.facebook.com/dohung6924"));
@@ -79,7 +82,7 @@ public class AuthService : IAuthService
          * Nếu cho phép online trên nhiều thiết bị: update token
          */
         
-        var key = BaseCacheKeys.GetAccessTokenKey(token.Id);
+        var key = AuthCacheKeys.GetAccessTokenKey(token.Id);
         var oldTokens = await _caching.GetStringAsync(key);
         if (CoreSettings.IsSingleDevice)
         {
@@ -114,14 +117,14 @@ public class AuthService : IAuthService
     public async Task RevokeAccessTokenAsync(string accessToken, CancellationToken cancellationToken = default)
     {
         await _caching.SetAsync(
-            BaseCacheKeys.GetRevokeAccessTokenKey(accessToken), 
+            AuthCacheKeys.GetRevokeAccessTokenKey(accessToken), 
             DateHelper.Now, 
             TimeSpan.FromSeconds(DefaultJWTConfig.ExpiredSecond));
     }
     
     public async Task<List<string>> RevokeAllAccessTokenAsync(Guid userId, CancellationToken cancellationToken = default)
     {
-        var key = BaseCacheKeys.GetAccessTokenKey(userId);
+        var key = AuthCacheKeys.GetAccessTokenKey(userId);
         var oldTokens = await _caching.GetStringAsync(key);
         var tokens = oldTokens.Split(";");
         await Task.WhenAll(tokens.Select(token => RevokeAccessTokenAsync(token, cancellationToken)).Concat(new Task[] { _caching.DeleteAsync(key) }));

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Core.Security.Attributes;
 using Core.Security.Enums;
 using Core.Security.Exceptions;
@@ -70,10 +70,10 @@ public class AuthorizationMiddleware
         }
     }
     
-    private AuthorizationRequestAttribute? GetAuthorizationAttribute(MemberInfo memberInfo)
+    private AuthorizationAttribute? GetAuthorizationAttribute(MemberInfo memberInfo)
     {
         // inherit một cờ (flag) xác định xem liệu phương thức này có nên tìm kiếm các attribute kế thừa từ các lớp cha hay không? (inherit: false là không)
-        return (AuthorizationRequestAttribute)memberInfo.GetCustomAttributes(typeof(AuthorizationRequestAttribute), inherit: false).FirstOrDefault();
+        return (AuthorizationAttribute)memberInfo.GetCustomAttributes(typeof(AuthorizationAttribute), inherit: false).FirstOrDefault();
     }
 }
 
@@ -81,6 +81,6 @@ public static class AuthorizationMiddlewareExtension
 {
     public static IApplicationBuilder UseCoreAuthorization(this IApplicationBuilder app)
     {
-        return app.UseMiddleware<AuthorizationMiddleware>();
+        return app.UseMiddleware<Microsoft.AspNetCore.Authorization.AuthorizationMiddleware>();
     }
 }

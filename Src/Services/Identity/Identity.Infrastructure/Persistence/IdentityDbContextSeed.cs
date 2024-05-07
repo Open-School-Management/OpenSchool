@@ -1,11 +1,8 @@
-using Identity.Application.Persistence;
+using Core.Security.Constants;
 using Identity.Domain.Entities;
 using Identity.Infrastructure.Persistence.Data;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using SharedKernel.Application;
-using Enum = System.Enum;
 
 namespace Identity.Infrastructure.Persistence;
 

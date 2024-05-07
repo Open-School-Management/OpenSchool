@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Caching.Sequence;
 using Core.Security.Constants;
 using Core.Security.Utilities;

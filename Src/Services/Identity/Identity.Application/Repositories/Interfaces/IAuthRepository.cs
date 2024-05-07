@@ -1,4 +1,6 @@
+using Core.Security.Models;
 using Identity.Application.DTOs.Auth;
+using SharedKernel.EntityFrameworkCore.Paging;
 
 namespace Identity.Application.Repositories.Interfaces;
 
@@ -29,7 +31,5 @@ public interface IAuthRepository
     Task<bool> VerifySecretKeyAsync(string secretKey, CancellationToken cancellationToken = default);
 
     Task<bool> CheckSignInHistoryAsync(RequestValue requestValue, CancellationToken cancellationToken = default);
-
-    Task<IPagedList<SignInHistoryDto>> GetSignInHistoryPagingAsync(PagingRequest pagingRequest, CancellationToken cancellationToken = default);
-
+    
 }

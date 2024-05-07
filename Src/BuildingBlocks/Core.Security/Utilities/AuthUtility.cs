@@ -14,20 +14,6 @@ namespace Core.Security.Utilities;
 
 public static class AuthUtility
 {
-    private static object _lockObj = new object();
-    private static IdGenerator generator = new IdGenerator(0);
-
-    /// <summary>
-    /// Tạo id theo twitter's snowflake
-    /// </summary>
-    public static long GenerateSnowflakeId()
-    {
-        lock (_lockObj)
-        {
-            return generator.CreateId();
-        }
-    }
-
     /// <summary>
     /// Kiểm tra endpoint có cần authorize không?
     /// </summary>

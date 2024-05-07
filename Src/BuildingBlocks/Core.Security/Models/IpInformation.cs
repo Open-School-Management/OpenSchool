@@ -2,7 +2,6 @@
 
 namespace Core.Security.Models;
 
-[Table("auth_ip_info")]
 public class IpInformation 
 {
     public long Id { get; set; }

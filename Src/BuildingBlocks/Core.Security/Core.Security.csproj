@@ -5,37 +5,20 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+    
 
     <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
-        <HintPath>..\..\..\..\..\.dotnet\packs\Microsoft.AspNetCore.App.Ref\8.0.3\ref\net8.0\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
-      </Reference>
-      <Reference Include="Microsoft.AspNetCore.Http.Features">
-        <HintPath>..\..\..\..\..\.dotnet\packs\Microsoft.AspNetCore.App.Ref\8.0.3\ref\net8.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
-      </Reference>
-      <Reference Include="Microsoft.AspNetCore.Mvc.Abstractions">
-        <HintPath>..\..\..\..\..\.dotnet\packs\Microsoft.AspNetCore.App.Ref\8.0.3\ref\net8.0\Microsoft.AspNetCore.Mvc.Abstractions.dll</HintPath>
-      </Reference>
-      <Reference Include="Microsoft.Net.Http.Headers">
-        <HintPath>..\..\..\..\..\.dotnet\packs\Microsoft.AspNetCore.App.Ref\8.0.3\ref\net8.0\Microsoft.Net.Http.Headers.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="IdGen" Version="3.0.3" />
-      <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
-      <PackageReference Include="Ocelot" Version="16.0.0" />
-      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.0" />
+        <PackageReference Include="IdGen" Version="3.0.3" />
+        <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
+        <PackageReference Include="Ocelot" Version="16.0.0" />
+        <PackageReference Include="Otp.NET" Version="1.4.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Core.Caching\Core.Caching.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Caching\Caching.csproj" />
     </ItemGroup>
 
 </Project>

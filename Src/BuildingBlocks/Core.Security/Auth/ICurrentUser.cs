@@ -12,9 +12,9 @@ public interface ICurrentUser
 
 public class ExecutionContext
 {
-    public string AccessToken { get; set; }
+    public string? AccessToken { get; set; }
     public Guid OwnerId { get; set; }
-    public string Username { get; set; }
-    public string Permission { get; set; }
+    public string? Username { get; set; }
+    public string? Permission { get; set; }
     public HttpContext HttpContext { get; set; }
 }

@@ -1,10 +1,11 @@
 using Caching;
+using Caching.Extensions;
+using Core.Security.Filters;
 using Microsoft.AspNetCore.HttpOverrides;
 using Notification.Extensions;
 using Serilog;
 using SharedKernel.Configures;
 using SharedKernel.Core;
-using SharedKernel.Filters;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

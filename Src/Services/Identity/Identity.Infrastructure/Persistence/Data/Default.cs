@@ -1,6 +1,5 @@
+using Core.Security.Constants;
 using Identity.Domain.Entities;
-using SharedKernel.Application;
-using SharedKernel.Libraries;
 
 namespace Identity.Infrastructure.Persistence.Data;
 

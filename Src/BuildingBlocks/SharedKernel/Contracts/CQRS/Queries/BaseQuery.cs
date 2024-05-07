@@ -4,7 +4,7 @@ using static Core.Security.Enums.SecurityEnum;
 
 namespace SharedKernel.Contracts
 {
-    [AuthorizationRequest]
+    [Authorization]
     public abstract class BaseQuery<TResponse> : IRequest<TResponse>
     {
     }

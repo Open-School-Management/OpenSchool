@@ -1,15 +1,13 @@
 using AutoMapper;
+using Core.Security.Constants;
+using Core.Security.Models;
+using Core.Security.Utilities;
 using Identity.Application.DTOs.Auth;
-using Identity.Application.Repositories.Interfaces;
 using Identity.Domain.Entities;
 using Identity.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SharedKernel.Application;
-using SharedKernel.Auth;
-using SharedKernel.Contracts;
-using SharedKernel.Domain;
-using SharedKernel.Libraries;
+using SharedKernel.EntityFrameworkCore.Paging;
 using SharedKernel.UnitOfWork;
 
 namespace Identity.Infrastructure.Repositories;
@@ -159,17 +157,7 @@ public class AuthRepository : IAuthRepository
 
         return existsInHistory;
     }
-
-    public async Task<IPagedList<SignInHistoryDto>> GetSignInHistoryPagingAsync(PagingRequest pagingRequest, CancellationToken cancellationToken = default)
-    {
-        var mapper = _provider.GetRequiredService<IMapper>();
-        var a = mapper.ProjectTo<SignInHistoryDto>(_context.SignInHistories);
-        return await _context.SignInHistories
-            .AsNoTracking()
-            .Where(e => e.Username == _currentUser.Context.Username)
-            .OrderByDescending(e => e.SignInTime)
-            .ToPagedListAsync<SignInHistory, SignInHistoryDto>(pagingRequest.Page, pagingRequest.Size, pagingRequest.IndexFrom, cancellationToken);
-    }
+    
 
     #region Privates
 
@@ -205,8 +193,7 @@ public class AuthRepository : IAuthRepository
             ConfirmedEmail = user.ConfirmedEmail,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            DateOfBirth = user.DateOfBirth,
-            Gender = user.Gender,
+            DateOfBirth = user.DateOfBirth
         };
         
         var roles = user.UserRoles.Select(u => u.Role).DistinctBy(r => r.Code).ToList();
@@ -217,11 +204,11 @@ public class AuthRepository : IAuthRepository
         
         if (supperAdmin != null)
         {
-            tokenUser.Permission = AuthUtility.CalculateToTalPermision(Enumerable.Range(0, (int)ActionExponent.SupperAdmin + 1));
+            tokenUser.Permission = AuthUtility.CalculateToTalPermission(Enumerable.Range(0, (int)ActionExponent.SupperAdmin + 1));
         }
         else if (admin != null)
         {
-            tokenUser.Permission = AuthUtility.CalculateToTalPermision(Enumerable.Range(0, (int)ActionExponent.Admin + 1));
+            tokenUser.Permission = AuthUtility.CalculateToTalPermission(Enumerable.Range(0, (int)ActionExponent.Admin + 1));
         }
         else
         {
@@ -230,7 +217,7 @@ public class AuthRepository : IAuthRepository
                 .DistinctBy(p => p.Code)
                 .ToList();
             
-            tokenUser.Permission = AuthUtility.CalculateToTalPermision(permission.Select(x => x.Exponent));
+            tokenUser.Permission = AuthUtility.CalculateToTalPermission(permission.Select(x => x.Exponent));
         }
         
         tokenUser.RoleNames = roles.Select(x => x.Name).ToList();

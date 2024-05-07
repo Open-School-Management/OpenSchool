@@ -17,14 +17,8 @@ namespace SharedKernel.Libraries
             };
         }
     }
-
     [AttributeUsage(AttributeTargets.Property)]
     public class IgnoreAttribute : Attribute
-    {
-    }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public class AutoIncAttribute : Attribute
     {
     }
 
@@ -35,29 +29,5 @@ namespace SharedKernel.Libraries
         {
         }
     }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public class FilterableAttribute : Attribute
-    {
-        public readonly string displayName;
-
-        public FilterableAttribute(string displayName)
-        {
-            this.displayName = displayName;
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public class AuditableAttribute : Attribute
-    {
-        public bool UseInsert { get; }
-
-        public bool UseDelete { get; }
-
-        public AuditableAttribute(bool useInsert = false, bool useDelete = false)
-        {
-            UseInsert = useInsert;
-            UseDelete = useDelete;
-        }
-    }
+    
 }

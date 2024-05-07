@@ -1,6 +1,8 @@
+using SharedKernel.EntityFrameworkCore.DbContext;
+
 namespace Identity.Application.Persistence;
 
-public interface IIdentityDbContext : ICoreDbContext
+public interface IIdentityDbContext : IBaseDbContext
 {
     DbSet<User> Users { get; set; }
     DbSet<Avatar> Avatars { get; set; }

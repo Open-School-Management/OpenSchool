@@ -1,3 +1,6 @@
+using Core.Security.Enums;
+using Core.Security.Models;
+using Core.Security.Services.Auth;
 using Identity.Application.Constants;
 using Identity.Application.DTOs.Auth;
 using Identity.Application.IntegrationEvents.Events;
@@ -5,6 +8,7 @@ using Identity.Application.IntegrationEvents.Services;
 using Identity.Application.Properties;
 using Identity.Application.Repositories.Interfaces;
 using MessageBroker.Abstractions.Events;
+using SharedKernel.EntityFrameworkCore.Paging;
 
 namespace Identity.Application.UseCase.VersionOne;
 
@@ -105,7 +109,7 @@ public class AuthUseCase : IAuthUseCase
             IsUsed = false,
             ExpiredDate = DateHelper.Now.AddMinutes(AuthConstant.MAX_TIME_OTP),
             ProvidedDate = DateHelper.Now,
-            Type = OtpType.Verify
+            Type = SecurityEnum.OtpType.Verify
         };
         // await _authRepository.CreateOtpAsync(otp, cancellationToken);
         
@@ -191,10 +195,5 @@ public class AuthUseCase : IAuthUseCase
     public async Task<RequestValue> GetRequestInformationAsync(CancellationToken cancellationToken = default)
     {
         return await _authService.GetRequestValueAsync(cancellationToken);
-    }
-
-    public async Task<IPagedList<SignInHistoryDto>> GetSignInHistoryPaging(PagingRequest pagingRequest, CancellationToken cancellationToken = default)
-    {
-        return await _authRepository.GetSignInHistoryPagingAsync(pagingRequest, cancellationToken);
     }
 }

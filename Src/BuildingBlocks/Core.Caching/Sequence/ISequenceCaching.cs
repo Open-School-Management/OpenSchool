@@ -8,9 +8,9 @@ public interface ISequenceCaching
     
     Task<object?> GetAsync(string key, CachingType type = CachingType.Couple);
 
-    Task<T> GetAsync<T>(string key, CachingType type = CachingType.Couple);
+    Task<T?> GetAsync<T>(string key, CachingType type = CachingType.Couple);
 
-    Task<string> GetStringAsync(string key, CachingType type = CachingType.Couple);
+    Task<string?> GetStringAsync(string key, CachingType type = CachingType.Couple);
 
     Task SetAsync(string key, object value, TimeSpan? absoluteExpireTime = null,  bool keepTtl = false, CachingType onlyUseType = CachingType.Couple);
 

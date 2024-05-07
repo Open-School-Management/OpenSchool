@@ -1,4 +1,6 @@
+using Core.Security.Enums;
 using Identity.Application.DTOs.Cpanel;
+using SharedKernel.EntityFrameworkCore.Paging;
 
 namespace Identity.Application.Repositories.Interfaces;
 
@@ -20,7 +22,7 @@ public interface ICpanelRepository
 
     Task<IPagedList<CpanelAccountDto>> GetAccountsPagingAsync(PagingRequest request, CancellationToken cancellationToken = default);
 
-    Task<List<CpanelPermissionDto>> GetPermissionByExponentsAsync(List<ActionExponent> exponents, CancellationToken cancellationToken = default);
+    Task<List<CpanelPermissionDto>> GetPermissionByExponentsAsync(List<SecurityEnum.ActionExponent> exponents, CancellationToken cancellationToken = default);
 
     Task<List<CpanelPermissionDto>> GetPermissionByRoleIdAsync(Guid roleId, CancellationToken cancellationToken = default);
 

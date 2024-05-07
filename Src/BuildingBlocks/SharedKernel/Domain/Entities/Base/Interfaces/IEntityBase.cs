@@ -1,6 +1,6 @@
 namespace SharedKernel.Domain;
 
-public interface IEntityBase<T> : ICoreEntity, ICloneable
+public interface IEntityBase<T> : ICoreEntity
 {
     T Id { get; set; }
 }

@@ -28,21 +28,17 @@ public class CurrentUser : ICurrentUser
     }
 
     #endregion
-
-    #region Constructors
+    
 
     public CurrentUser(IHttpContextAccessor accessor)
     {
-        _accessor = accessor;
+        _accessor = accessor ?? throw new ArgumentNullException(nameof(accessor));
     }
-
-    #endregion
-
-    #region Private
-
+    
+    
     private string GetAccessToken()
     {
-        var bearerToken = _accessor.HttpContext.Request.Headers[HeaderNames.Authorization].ToString();
+        var bearerToken = _accessor.HttpContext?.Request.Headers[HeaderNames.Authorization].ToString();
         if (string.IsNullOrEmpty(bearerToken) || bearerToken.Equals("Bearer"))
         {
             return "";
@@ -74,6 +70,4 @@ public class CurrentUser : ICurrentUser
             HttpContext = httpContext
         };
     }
-
-    #endregion
 }

@@ -1,5 +1,5 @@
+using Core.Security.Models;
 using MessageBroker.Abstractions.Events;
-using SharedKernel.Contracts;
 
 namespace Identity.Application.IntegrationEvents.Events;
 

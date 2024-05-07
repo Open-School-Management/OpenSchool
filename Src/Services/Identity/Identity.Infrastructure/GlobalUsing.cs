@@ -14,3 +14,4 @@ global using SharedKernel.Libraries;
 global using UAParser;
 global using Utility = SharedKernel.Libraries.Utility;
 global using static SharedKernel.Contracts.Enum;
+global using static Core.Security.Enums.SecurityEnum;

@@ -46,7 +46,7 @@ public class SequenceCaching : ISequenceCaching
         throw new Exception("The caching type is invalid. Please re-check!!!");
     }
 
-    public async Task<T> GetAsync<T>(string key, 
+    public async Task<T?> GetAsync<T>(string key, 
         CachingType type = CachingType.Couple)
     {
         switch (type)
@@ -70,7 +70,7 @@ public class SequenceCaching : ISequenceCaching
         throw new Exception("The caching type is invalid. Please re-check!!!");
     }
 
-    public async Task<string> GetStringAsync(string key, 
+    public async Task<string?> GetStringAsync(string key, 
         CachingType type = CachingType.Couple)
     {
         switch (type)

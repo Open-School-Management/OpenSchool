@@ -6,9 +6,8 @@ public class PagingRequest
 {
     private int _page = 0;
     private int _size = 20;
-    private int _indexFrom = 1;
 
-    public int Page
+    public int PageIndex
     {
         get
         {
@@ -26,7 +25,7 @@ public class PagingRequest
         }
     }
 
-    public int Size
+    public int PageSize
     {
         get
         {
@@ -43,37 +42,15 @@ public class PagingRequest
             _size = value;
         }
     }
+    
+    
+    public IEnumerable<Sort>? Sort { get; set; }
+    
+    public Filter? Filter { get; set; }
 
-    public int IndexFrom
+    public PagingRequest(int page, int size)
     {
-        get
-        {
-            return _indexFrom;
-        }
-
-        set
-        {
-            if (value < 0 || value > 1000)
-            {
-                throw new BadRequestException("Index from should be between 1 and 1000");
-            }
-
-            _indexFrom = value;
-        }
-    }
-    
-    public int Offset => (_page - _indexFrom) * _size;
-    
-    public string SearchString { get; set; } = string.Empty;
-
-    public Filter Filter { get; set; }
-    
-    public List<SortModel> Sorts { get; set; } = new List<SortModel>();
-
-    public PagingRequest(int page, int size, int indexFrom = 1)
-    {
-        Page = page;
-        Size = size;
-        IndexFrom = indexFrom;
+        PageIndex = page;
+        PageSize = size;
     }
 }

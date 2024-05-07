@@ -1,15 +1,13 @@
+using Core.Security.Services.Auth;
 using Identity.Application.IntegrationEvents.Services;
-using Identity.Application.Persistence;
 using Identity.Infrastructure.Persistence;
 using Identity.Infrastructure.Repositories;
 using Identity.Infrastructure.Services;
 using Identity.Infrastructure.Services.IntegrationEvents;
 using IntegrationEventLogs;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SharedKernel.Core;
 
 namespace Identity.Infrastructure;
 
