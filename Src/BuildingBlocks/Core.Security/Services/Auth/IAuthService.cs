@@ -23,6 +23,4 @@ public interface IAuthService
 
     Task<RequestValue> GetRequestValueAsync(CancellationToken cancellationToken = default);
 
-    string GenerateOtp();
-
 }

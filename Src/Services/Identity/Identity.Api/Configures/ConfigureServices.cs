@@ -19,12 +19,9 @@ public static class ConfigureServices
         services.AddSingleton(_ => configuration);
         
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-        // Điều này đăng ký dịch vụ xác thực chứng chỉ vào hệ thống xác thực của ứng dụng
+        
         services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
         
-        // Đoạn mã này đang cấu hình các tùy chọn cho xử lý dữ liệu form.
-        // Cụ thể, nó đang cấu hình giới hạn độ dài giá trị, độ dài của phần thân và phần đầu của yêu cầu dữ liệu đa phần (multipart)
         services.Configure<FormOptions>(x =>
         {
             x.ValueLengthLimit = int.MaxValue;
@@ -32,10 +29,8 @@ public static class ConfigureServices
             x.MultipartHeadersLengthLimit = int.MaxValue;
         });
         
-        // Đoạn mã đang cấu hình mức độ nén cho việc nén gzip. Trong trường hợp này, nó được cấu hình để sử dụng mức độ nén nhanh nhất 
         services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
-
-        // cấu hình này giúp ứng dụng của bạn có khả năng nén phản hồi để giảm băng thông và tăng tốc độ truyền tải cho client.
+        
         services.AddResponseCompression(options =>
         {
             options.EnableForHttps = true;
@@ -94,12 +89,7 @@ public static class ConfigureServices
         services.AddVersionedApiExplorer(
             options =>
             {
-                // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
-                // note: the specified format code will format the version as "'v'major[.minor][-status]"
                 options.GroupNameFormat = "'v'VVV";
-                
-                // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
-                // can also be used to control the format of the API version in route templates
                 options.SubstituteApiVersionInUrl = true;
             });
         

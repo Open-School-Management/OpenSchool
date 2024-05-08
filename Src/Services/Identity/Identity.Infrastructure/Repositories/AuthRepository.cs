@@ -1,13 +1,9 @@
-using AutoMapper;
 using Core.Security.Constants;
 using Core.Security.Models;
 using Core.Security.Utilities;
-using Identity.Application.DTOs.Auth;
 using Identity.Domain.Entities;
 using Identity.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using SharedKernel.EntityFrameworkCore.Paging;
 using SharedKernel.UnitOfWork;
 
 namespace Identity.Infrastructure.Repositories;

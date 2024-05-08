@@ -1,6 +1,4 @@
 using Core.Security.Models;
-using Identity.Application.DTOs.Auth;
-using SharedKernel.EntityFrameworkCore.Paging;
 
 namespace Identity.Application.Repositories.Interfaces;
 

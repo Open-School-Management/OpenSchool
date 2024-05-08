@@ -3,17 +3,10 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Identity.Application.IntegrationEvents.EventHandling;
 using Identity.Application.IntegrationEvents.Events;
-using Identity.Application.IntegrationEvents.Services;
-using Identity.Application.Persistence;
-using Identity.Application.UseCase.VersionOne;
-using IntegrationEventLogs;
-using MessageBroker.Abstractions;
 using MessageBroker.Abstractions.Extensions;
 using MessageBroker.RabbitMQ;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using SharedKernel.Core;
 
 namespace Identity.Application;
 
@@ -41,8 +34,7 @@ public static class ConfigureServices
         services.AddRabbitMqEventBus(configuration)
             .AddEventBusSubscriptions();
         
-        // Add UseCase
-        services.AddScoped<IAuthUseCase, AuthUseCase>();
+        // Features
         
         return services;
     }

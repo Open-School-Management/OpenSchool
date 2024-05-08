@@ -14,11 +14,6 @@
       <ProjectReference Include="..\..\..\BuildingBlocks\SharedKernel\SharedKernel.csproj" />
       <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Features\Auth\Command\" />
-      <Folder Include="Features\Auth\DTOs\" />
-    </ItemGroup>
     
 
 </Project>

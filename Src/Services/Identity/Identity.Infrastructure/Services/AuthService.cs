@@ -156,10 +156,5 @@ public class AuthService : IAuthService
         return value;
         
     }
-
-    public string GenerateOtp()
-    {
-        return Utility.RandomNumber(AuthConstant.OTP_LENGTH);
-    }
     
 }
