@@ -43,11 +43,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBroker.RabbitMQ", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationEventLogs", "Src\BuildingBlocks\IntegrationEventLogs\IntegrationEventLogs.csproj", "{860CBFAC-662B-46DE-A3E6-92E5935C55A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR", "Src\BuildingBlocks\SignalR\SignalR.csproj", "{0CFED206-C4E2-4AC6-8D29-02577DD4EFC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.SignalR", "Src\BuildingBlocks\Core.SignalR\Core.SignalR.csproj", "{0CFED206-C4E2-4AC6-8D29-02577DD4EFC6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Security", "Src\BuildingBlocks\Core.Security\Core.Security.csproj", "{29470635-073B-4B3E-99D2-9F4BB9073CBB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Logging", "Src\BuildingBlocks\Core.Logging\Core.Logging.csproj", "{822378A7-310F-47B7-B7C7-C66372338F59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Mailing", "Src\BuildingBlocks\Core.Mailing\Core.Mailing.csproj", "{74C3DE6B-E5D9-4DCB-84A2-C7C698036992}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +74,7 @@ Global
 		{0CFED206-C4E2-4AC6-8D29-02577DD4EFC6} = {62B12B0F-6FA2-44C5-98D3-17630749D9F8}
 		{29470635-073B-4B3E-99D2-9F4BB9073CBB} = {62B12B0F-6FA2-44C5-98D3-17630749D9F8}
 		{822378A7-310F-47B7-B7C7-C66372338F59} = {62B12B0F-6FA2-44C5-98D3-17630749D9F8}
+		{74C3DE6B-E5D9-4DCB-84A2-C7C698036992} = {62B12B0F-6FA2-44C5-98D3-17630749D9F8}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FE2895D7-7512-4B3A-B2EA-C801BDA21E8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -126,5 +129,9 @@ Global
 		{822378A7-310F-47B7-B7C7-C66372338F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{822378A7-310F-47B7-B7C7-C66372338F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{822378A7-310F-47B7-B7C7-C66372338F59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74C3DE6B-E5D9-4DCB-84A2-C7C698036992}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74C3DE6B-E5D9-4DCB-84A2-C7C698036992}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74C3DE6B-E5D9-4DCB-84A2-C7C698036992}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74C3DE6B-E5D9-4DCB-84A2-C7C698036992}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

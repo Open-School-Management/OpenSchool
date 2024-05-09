@@ -1,5 +1,6 @@
 using Caching;
 using Caching.Extensions;
+using Core.Security;
 using Core.Security.Filters;
 using Microsoft.AspNetCore.HttpOverrides;
 using Notification.Extensions;

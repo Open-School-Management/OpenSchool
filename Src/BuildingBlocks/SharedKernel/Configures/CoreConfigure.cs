@@ -83,20 +83,7 @@ public static partial class ConfigureExtension
         });
         return services;
     }
-
-
-    public static IServiceCollection AddCurrentUser(this IServiceCollection services)
-    {
-        services.AddScoped<ICurrentUser, CurrentUser>();
-        return services;
-    }
-
-    public static IServiceCollection AddExceptionHandler(this IServiceCollection services)
-    {
-        services.AddSingleton<IExceptionHandler, ExceptionHandler>();
-        return services;
-    }
-
+    
     public static IServiceCollection AddCoreRateLimit(this IServiceCollection services)
     {
         services.Configure<IpRateLimitOptions>(options =>

@@ -16,7 +16,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\MessageBroker.RabbitMQ\MessageBroker.RabbitMQ.csproj" />
       <ProjectReference Include="..\..\..\BuildingBlocks\SharedKernel\SharedKernel.csproj" />
-      <ProjectReference Include="..\..\..\BuildingBlocks\SignalR\SignalR.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\Core.SignalR\Core.SignalR.csproj" />
     </ItemGroup>
 
 </Project>

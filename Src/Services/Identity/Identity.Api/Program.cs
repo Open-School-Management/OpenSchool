@@ -1,4 +1,5 @@
 using Caching.Extensions;
+using Core.Security;
 using Core.Security.Filters;
 using Identity.Api.Configures;
 using Identity.Application;
