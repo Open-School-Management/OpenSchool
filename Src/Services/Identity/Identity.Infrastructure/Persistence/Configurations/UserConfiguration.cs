@@ -60,10 +60,6 @@ public class UserConfiguration : EntityAuditConfiguration<User>
         builder
             .Property(u => u.LastName)
             .HasMaxLength(50);
-
-        builder
-            .Property(u => u.Address)
-            .HasMaxLength(255);
         
         builder.Property(cd => cd.Gender)
             .HasConversion(
@@ -74,11 +70,6 @@ public class UserConfiguration : EntityAuditConfiguration<User>
         #endregion
 
         #region Reference property
-
-        builder
-            .HasOne(u => u.Avatar)
-            .WithOne(a => a.User)
-            .HasForeignKey<Avatar>(e => e.OwnerId);
         
         builder
             .HasOne(u => u.UserConfig)
@@ -93,7 +84,7 @@ public class UserConfiguration : EntityAuditConfiguration<User>
         builder
             .HasOne(u => u.Otp)
             .WithOne(uc => uc.User)
-            .HasForeignKey<OTP>(u => u.OwnerId);
+            .HasForeignKey<Otp>(u => u.OwnerId);
         
         builder
             .HasOne(u => u.Mfa)

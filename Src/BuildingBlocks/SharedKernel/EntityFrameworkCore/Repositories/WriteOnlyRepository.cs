@@ -15,7 +15,7 @@ namespace SharedKernel.Infrastructures;
 
 public class WriteOnlyRepository<TEntity, TKey, TDbContext>
     : ReadOnlyRepository<TEntity, TKey, TDbContext>, 
-        IWriteOnlyRepository<TEntity, TKey, TDbContext>
+        IWriteOnlyRepository<TEntity, TKey>
     where TEntity : EntityBase<TKey>
     where TDbContext : BaseDbContext
 {
@@ -29,34 +29,46 @@ public class WriteOnlyRepository<TEntity, TKey, TDbContext>
 
     public IUnitOfWork UnitOfWork => Context;
     
-    public Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        EditEntityPropertiesToAdd(entity);
+        await Context.AddAsync(entity, cancellationToken);
+        return entity;
     }
 
-    public Task<ICollection<TEntity>> AddRangeAsync(ICollection<TEntity> entities, CancellationToken cancellationToken = default)
+    public async Task<ICollection<TEntity>> AddRangeAsync(ICollection<TEntity> entities, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        foreach (TEntity entity in entities)
+            EditEntityPropertiesToAdd(entity);
+        await Context.AddRangeAsync(entities, cancellationToken);
+        return entities;
     }
 
-    public Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        EditEntityPropertiesToUpdate(entity);
+        Context.Update(entity);
+        return entity;
     }
 
-    public Task<ICollection<TEntity>> UpdateRangeAsync(ICollection<TEntity> entities, CancellationToken cancellationToken = default)
+    public async Task<ICollection<TEntity>> UpdateRangeAsync(ICollection<TEntity> entities, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        foreach (TEntity entity in entities)
+            EditEntityPropertiesToUpdate(entity);
+        Context.UpdateRange(entities);
+        return entities;
     }
 
-    public Task<TEntity> DeleteAsync(TEntity entity, bool permanent = false, CancellationToken cancellationToken = default)
+    public async Task<TEntity> DeleteAsync(TEntity entity, bool permanent = false, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await SetEntityAsDeleted(entity, permanent, cancellationToken);
+        return entity;
     }
 
-    public Task<ICollection<TEntity>> DeleteRangeAsync(ICollection<TEntity> entities, bool permanent = false, CancellationToken cancellationToken = default)
+    public async Task<ICollection<TEntity>> DeleteRangeAsync(ICollection<TEntity> entities, bool permanent = false, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await SetEntityAsDeleted(entities, permanent, cancellationToken);
+        return entities;
     }
     protected virtual void EditEntityPropertiesToAdd(TEntity entity)
     {
@@ -96,6 +108,16 @@ public class WriteOnlyRepository<TEntity, TKey, TDbContext>
         }
         else
             Context.Remove(entity);
+    }
+    
+    protected async Task SetEntityAsDeleted(
+        IEnumerable<TEntity> entities,
+        bool permanent,
+        CancellationToken cancellationToken = default
+    )
+    {
+        foreach (TEntity entity in entities)
+            await SetEntityAsDeleted(entity, permanent, cancellationToken);
     }
     
     protected virtual void EditEntityPropertiesToDelete(TEntity entity)

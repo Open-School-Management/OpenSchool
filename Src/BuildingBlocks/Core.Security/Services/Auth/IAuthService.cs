@@ -1,13 +1,12 @@
-﻿using Core.Security.Enums;
-using Core.Security.Models;
+﻿using Core.Security.Models;
 
 namespace Core.Security.Services.Auth;
 
 public interface IAuthService
 {
-    bool CheckPermission(SecurityEnum.ActionExponent exponent);
+    bool CheckPermission(ActionExponent exponent, string permission);
 
-    bool CheckPermission(SecurityEnum.ActionExponent[] exponents);
+    bool CheckPermission(ActionExponent[] exponents, string permission);
 
     Task<string> GenerateAccessTokenAsync(TokenUser token, CancellationToken cancellationToken = default);
 

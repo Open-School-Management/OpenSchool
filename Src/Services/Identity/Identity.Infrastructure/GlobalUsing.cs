@@ -1,5 +1,5 @@
 global using System.Text;
-global using Identity.Application.Repositories.Interfaces;
+global using Identity.Application.Repositories;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.IdentityModel.Tokens;

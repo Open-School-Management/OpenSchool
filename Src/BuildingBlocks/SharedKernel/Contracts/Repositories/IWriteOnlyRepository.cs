@@ -5,9 +5,8 @@ using SharedKernel.UnitOfWork;
 
 namespace SharedKernel.Contracts.Repositories;
 
-public interface IWriteOnlyRepository<TEntity, in TKey ,TDbContext> : IReadOnlyRepository<TEntity, TKey>
+public interface IWriteOnlyRepository<TEntity, in TKey> : IReadOnlyRepository<TEntity, TKey>
     where TEntity : EntityBase<TKey>
-    where TDbContext : IBaseDbContext
 {
     IUnitOfWork UnitOfWork { get; }
     

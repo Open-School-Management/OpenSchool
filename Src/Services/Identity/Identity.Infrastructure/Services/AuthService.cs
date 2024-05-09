@@ -13,35 +13,32 @@ public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
     private readonly ISequenceCaching _caching;
-    private readonly ICurrentUser _currentUser;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IServiceProvider _provider;
     public AuthService(
         IAuthRepository authRepository,
         ISequenceCaching caching,
-        ICurrentUser currentUser,
         IHttpContextAccessor httpContextAccessor,
         IServiceProvider provider)
     {
         _authRepository = authRepository;
         _caching = caching;
-        _currentUser = currentUser;
         _httpContextAccessor = httpContextAccessor;
         _provider = provider;
     }
     
-    public bool CheckPermission(ActionExponent exponent)
+    public bool CheckPermission(ActionExponent exponent, string permission)
     {
-        return CheckPermission(new ActionExponent[] { exponent });
+        return CheckPermission(new ActionExponent[] { exponent }, permission);
     }
 
-    public bool CheckPermission(ActionExponent[] exponents)
+    public bool CheckPermission(ActionExponent[] exponents, string permission)
     {
         var length = exponents.Length;
         for (int i = 0; i < length; i++)
         {
             var action = AuthUtility.FromExponentToPermission((int)exponents[i]);
-            if (!AuthUtility.ComparePermissionAsString(_currentUser.Context.Permission, action))
+            if (!AuthUtility.ComparePermissionAsString(permission, action))
             {
                 return false;
             }
@@ -133,7 +130,7 @@ public class AuthService : IAuthService
     
     public async Task<bool> IsNewLoginAddressAsync(RequestValue requestValue, CancellationToken cancellationToken = default)
     {
-        return await _authRepository.CheckSignInHistoryAsync(requestValue, cancellationToken);
+        return true;
     }
 
     public async Task<RequestValue> GetRequestValueAsync(CancellationToken cancellationToken = default)

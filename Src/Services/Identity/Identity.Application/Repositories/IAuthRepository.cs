@@ -1,8 +1,9 @@
 using Core.Security.Models;
+using SharedKernel.Domain;
 
-namespace Identity.Application.Repositories.Interfaces;
+namespace Identity.Application.Repositories;
 
-public interface IAuthRepository
+public interface IAuthRepository : IWriteOnlyRepository<EntityBase, Guid>
 {
     IUnitOfWork UnitOfWork { get; }
 
@@ -17,17 +18,5 @@ public interface IAuthRepository
     Task RemoveRefreshTokenAsync(CancellationToken cancellationToken = default);
     
     Task RemoveRefreshTokenAsync(List<string> accessTokens, CancellationToken cancellationToken = default);
-
-    Task CreateOtpAsync(OTP otp, CancellationToken cancellationToken = default);
-    
-    Task UpdateOtpAsync(OTP otp, CancellationToken cancellationToken = default);
-    
-    Task UsedOtpAsync(OTP otp, CancellationToken cancellationToken = default);
-
-    Task<OTP?> GetUnexpiredOtpAsync(Guid ownerId, string otp, CancellationToken cancellationToken = default);
-    
-    Task<bool> VerifySecretKeyAsync(string secretKey, CancellationToken cancellationToken = default);
-
-    Task<bool> CheckSignInHistoryAsync(RequestValue requestValue, CancellationToken cancellationToken = default);
     
 }

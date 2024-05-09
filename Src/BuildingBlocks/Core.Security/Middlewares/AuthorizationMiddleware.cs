@@ -6,6 +6,7 @@ using Core.Security.Services.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using SharedKernel.Auth;
 
 namespace Core.Security.Middlewares;
 
@@ -13,13 +14,16 @@ public class AuthorizationMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly IAuthService _authService;
+    private readonly ICurrentUser _currentUser;
     
     public AuthorizationMiddleware(
         RequestDelegate next,
-        IAuthService authService)
+        IAuthService authService, 
+        ICurrentUser currentUser)
     {
         _next = next;
         _authService = authService;
+        _currentUser = currentUser;
     }
     
     
@@ -43,7 +47,7 @@ public class AuthorizationMiddleware
                 var allowAnonymous = controllerAttribute.Exponents.Contains(SecurityEnum.ActionExponent.AllowAnonymous);
                 if (!allowAnonymous)
                 {
-                    var hasPermission = _authService.CheckPermission(controllerAttribute.Exponents);
+                    var hasPermission = _authService.CheckPermission(controllerAttribute.Exponents, _currentUser.Context.Permission);
                     if (!hasPermission)
                     {
                         throw new ForbiddenException();
@@ -59,7 +63,7 @@ public class AuthorizationMiddleware
                 var allowAnonymous = actionAttribute.Exponents.Contains(SecurityEnum.ActionExponent.AllowAnonymous);
                 if (!allowAnonymous)
                 {
-                    var hasPermission = _authService.CheckPermission(actionAttribute.Exponents);
+                    var hasPermission = _authService.CheckPermission(actionAttribute.Exponents, _currentUser.Context.Permission);
                     if (!hasPermission)
                     {
                         throw new ForbiddenException();

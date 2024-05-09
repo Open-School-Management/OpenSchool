@@ -1,26 +1,23 @@
+using Caching.Sequence;
 using Core.Security.Constants;
 using Core.Security.Models;
 using Core.Security.Utilities;
 using Identity.Domain.Entities;
 using Identity.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel.UnitOfWork;
+using SharedKernel.Infrastructures;
 
 namespace Identity.Infrastructure.Repositories;
 
-public class AuthRepository : IAuthRepository
+public class AuthRepository : WriteOnlyRepository<EntityBase, Guid, IdentityDbContext>, IAuthRepository
 {
-    private readonly IdentityDbContext _context;
-    private readonly ICurrentUser _currentUser;
-    private readonly IServiceProvider _provider;
-
-    public AuthRepository(IdentityDbContext context, ICurrentUser currentUser)
-    {
-        _context = context;
-        _currentUser = currentUser;
-    }
     
-    public IUnitOfWork UnitOfWork => _context;
+    public AuthRepository(
+        IdentityDbContext context, 
+        ICurrentUser currentUser, 
+        ISequenceCaching sequenceCaching) : base(context, currentUser, sequenceCaching)
+    {
+    }
     
     public async Task<TokenUser?> GetTokenUserByIdentityAsync(string username, CancellationToken cancellationToken = default)
     {
@@ -33,7 +30,7 @@ public class AuthRepository : IAuthRepository
     }
     public async Task<bool> CheckRefreshTokenAsync(string value, Guid userId, CancellationToken cancellationToken = default)
     {
-        var refreshToken = await _context.RefreshTokens
+        var refreshToken = await Context.RefreshTokens
             .FirstOrDefaultAsync(rt => 
                     rt.RefreshTokenValue.Equals(value)  
                     && rt.OwnerId.Equals(userId) 
@@ -45,12 +42,12 @@ public class AuthRepository : IAuthRepository
 
     public async Task CreateOrUpdateRefreshTokenAsync(RefreshToken refreshToken, CancellationToken cancellationToken = default)
     {
-        var existingRefreshToken = await _context.RefreshTokens
-            .FirstOrDefaultAsync(rt => rt.CurrentAccessToken.Equals(_currentUser.Context.AccessToken), cancellationToken);
+        var existingRefreshToken = await Context.RefreshTokens
+            .FirstOrDefaultAsync(rt => rt.CurrentAccessToken.Equals(CurrentUser.Context.AccessToken), cancellationToken);
         
         if (existingRefreshToken == null)
         {
-            await _context.RefreshTokens.AddAsync(refreshToken, cancellationToken);
+            await Context.RefreshTokens.AddAsync(refreshToken, cancellationToken);
         }
         else
         {
@@ -58,108 +55,62 @@ public class AuthRepository : IAuthRepository
             existingRefreshToken.CurrentAccessToken = refreshToken.CurrentAccessToken;
             existingRefreshToken.ExpirationDate = refreshToken.ExpirationDate;
             
-            _context.RefreshTokens.Update(existingRefreshToken);
+            Context.RefreshTokens.Update(existingRefreshToken);
         }
     }
 
     public async Task RemoveRefreshTokenAsync(CancellationToken cancellationToken = default)
     {
-        var refreshToken = await _context.RefreshTokens
-            .FirstOrDefaultAsync(rt => rt.CurrentAccessToken.Equals(_currentUser.Context.AccessToken), cancellationToken);
+        var refreshToken = await Context.RefreshTokens
+            .FirstOrDefaultAsync(rt => rt.CurrentAccessToken.Equals(CurrentUser.Context.AccessToken), cancellationToken);
         if (refreshToken == null) return;
         
-        _context.RefreshTokens.Remove(refreshToken);
-    }
-
-    public async Task CreateOtpAsync(OTP otp, CancellationToken cancellationToken = default)
-    {
-        await _context.OTPs.AddAsync(otp, cancellationToken);
+        Context.RefreshTokens.Remove(refreshToken);
     }
     
-
-    public async Task UpdateOtpAsync(OTP otp, CancellationToken cancellationToken = default)
-    {
-        if (_context.Entry(otp).State == Microsoft.EntityFrameworkCore.EntityState.Unchanged) return;
-
-        OTP exist = await _context.OTPs.FindAsync(otp.Id);
-        _context.Entry(exist).CurrentValues.SetValues(otp);
-    }
-
-    public async Task<OTP?> GetUnexpiredOtpAsync(Guid ownerId, string otp, CancellationToken cancellationToken = default)
-    {
-        return await _context.OTPs.
-            SingleOrDefaultAsync(e => e.Otp == otp && e.OwnerId == ownerId && !e.IsUsed && e.ExpiredDate >= DateHelper.Now, cancellationToken);
-    }
-    
-    public async Task UsedOtpAsync(OTP otp, CancellationToken cancellationToken = default)
-    {
-        otp.IsUsed = true;
-        await UpdateOtpAsync(otp, cancellationToken);
-    }
-
     public async Task RemoveRefreshTokenAsync(List<string> accessTokens, CancellationToken cancellationToken = default)
     {
-        var refreshTokens = await _context.RefreshTokens.Where(e => accessTokens.Contains(e.CurrentAccessToken)).ToListAsync(cancellationToken);
+        var refreshTokens = await Context.RefreshTokens.Where(e => accessTokens.Contains(e.CurrentAccessToken)).ToListAsync(cancellationToken);
         if (refreshTokens.Any()) return;
         
-        _context.RefreshTokens.RemoveRange(refreshTokens);
+        Context.RefreshTokens.RemoveRange(refreshTokens);
     }
 
     public async Task AddRoleForUserAsync(List<UserRole> userRoles, CancellationToken cancellationToken = default)
     {
-        await _context.UserRoles.AddRangeAsync(userRoles, cancellationToken);
+        await Context.UserRoles.AddRangeAsync(userRoles, cancellationToken);
     }
     
     public void RevokeRoleForUserAsync(List<UserRole> userRoles, CancellationToken cancellationToken = default)
     {
-        _context.UserRoles.RemoveRange(userRoles);
+        Context.UserRoles.RemoveRange(userRoles);
     }
 
     public async Task AddPermissionForRoleAsync(List<RolePermission> rolePermissions, CancellationToken cancellationToken = default)
     {
-        await _context.RolePermissions.AddRangeAsync(rolePermissions, cancellationToken);
+        await Context.RolePermissions.AddRangeAsync(rolePermissions, cancellationToken);
     }
     
     public void RevokePermissionForRoleAsync(List<RolePermission> rolePermissions, CancellationToken cancellationToken = default)
     {
-        _context.RolePermissions.RemoveRange(rolePermissions);
+        Context.RolePermissions.RemoveRange(rolePermissions);
     }
 
     public async Task AddPermissionForUserAsync(List<UserPermission> userPermissions, CancellationToken cancellationToken = default)
     {
-        await _context.UserPermissions.AddRangeAsync(userPermissions, cancellationToken);
+        await Context.UserPermissions.AddRangeAsync(userPermissions, cancellationToken);
     }
     
     public void RevokePermissionForUserAsync(List<UserPermission> userPermissions, CancellationToken cancellationToken = default)
     {
-        _context.UserPermissions.RemoveRange(userPermissions);
-    }
-
-    public async Task<bool> VerifySecretKeyAsync(string secretKey, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
+        Context.UserPermissions.RemoveRange(userPermissions);
     }
     
-    public async Task<bool> CheckSignInHistoryAsync(RequestValue requestValue, CancellationToken cancellationToken = default)
-    {
-        var existsInHistory = await _context.SignInHistories
-            .AnyAsync(s =>
-                s.Ip == requestValue.Ip 
-                && s.UA == requestValue.UA 
-                && s.Device == requestValue.Device 
-                && s.Browser == requestValue.Browser 
-                && s.OS == requestValue.OS,
-            cancellationToken);
-
-        return existsInHistory;
-    }
-    
-
     #region Privates
 
     private async Task<TokenUser?> GetTokenUserByIdentityOrOwnerIdAsync(string? username, Guid? userId, CancellationToken cancellationToken = default)
     {
-        IQueryable<User> query = _context.Users.AsNoTracking()
+        IQueryable<User> query = Context.Users.AsNoTracking()
             .Include(u => u.UserPermissions)
                 .ThenInclude(up => up.Permission)
             .Include(u => u.UserRoles)
@@ -222,4 +173,5 @@ public class AuthRepository : IAuthRepository
     }
     
     #endregion
+    
 }

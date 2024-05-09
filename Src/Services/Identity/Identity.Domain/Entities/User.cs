@@ -24,8 +24,6 @@ public class User : EntityAuditBase
 
     public string LastName { get; set; }
 
-    public string Address { get; set; }
-
     public DateTime DateOfBirth { get; set; }
 
     public GenderType Gender { get; set; }
@@ -34,10 +32,9 @@ public class User : EntityAuditBase
     
     #region Navigations
     
-    public virtual Avatar Avatar { get; set; }
     public virtual UserConfig UserConfig { get; set; }
     public virtual SecretKey SecretKey { get; set; }
-    public virtual OTP Otp { get; set; }
+    public virtual Otp Otp { get; set; }
     public virtual MFA Mfa { get; set; }
     
     public ICollection<RefreshToken> RefreshTokens { get; set; }

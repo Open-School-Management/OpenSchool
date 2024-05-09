@@ -1,0 +1,1 @@
+﻿global using static Core.Security.Enums.SecurityEnum;

@@ -16,7 +16,7 @@ public class IdentityDbContext : BaseDbContext, IIdentityDbContext
     }
     
     public DbSet<User> Users { get; set; }
-    public DbSet<Avatar> Avatars { get; set; }
+    
     public DbSet<UserConfig> UserConfigs { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Role> Roles { get; set; }
@@ -26,8 +26,8 @@ public class IdentityDbContext : BaseDbContext, IIdentityDbContext
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<SignInHistory> SignInHistories { get; set; }
     public DbSet<SecretKey> SecretKeys { get; set; }
-    public DbSet<OTP> OTPs { get; set; }
-    public DbSet<MFA> MFAs { get; set; }
+    public DbSet<Otp> Otps { get; set; }
+    public DbSet<MFA> Mfas { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

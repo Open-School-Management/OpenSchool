@@ -1,5 +1,6 @@
 using Core.Security.Services.Auth;
 using Identity.Application.IntegrationEvents.Services;
+using Identity.Application.Repositories;
 using Identity.Infrastructure.Persistence;
 using Identity.Infrastructure.Repositories;
 using Identity.Infrastructure.Services;
