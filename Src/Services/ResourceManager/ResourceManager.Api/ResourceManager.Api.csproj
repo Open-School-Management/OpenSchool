@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Apis\" />
+      <Folder Include="Application\Behaviors\" />
+      <Folder Include="Application\Commands\" />
+      <Folder Include="Application\DomainEventHandlers\" />
+      <Folder Include="Application\IntegrationEvents\" />
+      <Folder Include="Application\Models\" />
+      <Folder Include="Application\Queries\" />
+      <Folder Include="Application\Validations\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\SharedKernel\SharedKernel.csproj" />
+      <ProjectReference Include="..\ResourceManager.Domain\ResourceManager.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

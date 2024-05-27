@@ -51,6 +51,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Logging", "Src\Buildin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Mailing", "Src\BuildingBlocks\Core.Mailing\Core.Mailing.csproj", "{74C3DE6B-E5D9-4DCB-84A2-C7C698036992}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ResourceManager", "ResourceManager", "{2711B6A3-B46B-4CAF-B35F-72EF08D5210D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManager.Api", "Src\Services\ResourceManager\ResourceManager.Api\ResourceManager.Api.csproj", "{6CCAEE09-2E75-4765-80FB-8C36C2722179}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManager.Domain", "Src\Services\ResourceManager\ResourceManager.Domain\ResourceManager.Domain.csproj", "{8D54D839-DF7D-4A7E-BDCC-2FEFC0BDD6F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManager.Infrastructure", "Src\Services\ResourceManager\ResourceManager.Infrastructure\ResourceManager.Infrastructure.csproj", "{6E6774C9-583D-4F45-89FB-F8F1B6E6225B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceManager.CloudStorage", "Src\Services\ResourceManager\ResourceManager.CloudStorage\ResourceManager.CloudStorage.csproj", "{82F17BB8-ED91-402E-91BD-C2B5F34981B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +85,11 @@ Global
 		{29470635-073B-4B3E-99D2-9F4BB9073CBB} = {62B12B0F-6FA2-44C5-98D3-17630749D9F8}
 		{822378A7-310F-47B7-B7C7-C66372338F59} = {62B12B0F-6FA2-44C5-98D3-17630749D9F8}
 		{74C3DE6B-E5D9-4DCB-84A2-C7C698036992} = {62B12B0F-6FA2-44C5-98D3-17630749D9F8}
+		{2711B6A3-B46B-4CAF-B35F-72EF08D5210D} = {28E3F481-B153-4C6F-8749-26873BFC3B14}
+		{6CCAEE09-2E75-4765-80FB-8C36C2722179} = {2711B6A3-B46B-4CAF-B35F-72EF08D5210D}
+		{8D54D839-DF7D-4A7E-BDCC-2FEFC0BDD6F4} = {2711B6A3-B46B-4CAF-B35F-72EF08D5210D}
+		{6E6774C9-583D-4F45-89FB-F8F1B6E6225B} = {2711B6A3-B46B-4CAF-B35F-72EF08D5210D}
+		{82F17BB8-ED91-402E-91BD-C2B5F34981B6} = {2711B6A3-B46B-4CAF-B35F-72EF08D5210D}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FE2895D7-7512-4B3A-B2EA-C801BDA21E8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -133,5 +148,21 @@ Global
 		{74C3DE6B-E5D9-4DCB-84A2-C7C698036992}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74C3DE6B-E5D9-4DCB-84A2-C7C698036992}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74C3DE6B-E5D9-4DCB-84A2-C7C698036992}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CCAEE09-2E75-4765-80FB-8C36C2722179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CCAEE09-2E75-4765-80FB-8C36C2722179}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CCAEE09-2E75-4765-80FB-8C36C2722179}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CCAEE09-2E75-4765-80FB-8C36C2722179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D54D839-DF7D-4A7E-BDCC-2FEFC0BDD6F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D54D839-DF7D-4A7E-BDCC-2FEFC0BDD6F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D54D839-DF7D-4A7E-BDCC-2FEFC0BDD6F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D54D839-DF7D-4A7E-BDCC-2FEFC0BDD6F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E6774C9-583D-4F45-89FB-F8F1B6E6225B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E6774C9-583D-4F45-89FB-F8F1B6E6225B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E6774C9-583D-4F45-89FB-F8F1B6E6225B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E6774C9-583D-4F45-89FB-F8F1B6E6225B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82F17BB8-ED91-402E-91BD-C2B5F34981B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82F17BB8-ED91-402E-91BD-C2B5F34981B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82F17BB8-ED91-402E-91BD-C2B5F34981B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82F17BB8-ED91-402E-91BD-C2B5F34981B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
