@@ -35,9 +35,9 @@
         <PackageReference Include="IdGen" Version="3.0.3" />
         <PackageReference Include="MySqlConnector" Version="2.3.6" />
         <PackageReference Include="MongoDB.Driver" Version="2.21.0" />
-
+        
         <!-- MediatR-->
-        <PackageReference Include="MediatR" Version="11.1.0" />
+        <PackageReference Include="MediatR" Version="12.0.1" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
 
         <!-- EF Core -->

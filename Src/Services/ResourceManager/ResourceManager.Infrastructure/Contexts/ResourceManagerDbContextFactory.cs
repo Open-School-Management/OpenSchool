@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace ResourceManager.Infrastructure.Contexts;
 
-
 public class ResourceManagerDbContextFactory : IDesignTimeDbContextFactory<ResourceManagerDbContext>
 {
     public ResourceManagerDbContext CreateDbContext(string[] args)

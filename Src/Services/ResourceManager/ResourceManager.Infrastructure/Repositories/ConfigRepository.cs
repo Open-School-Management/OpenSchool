@@ -1,4 +1,4 @@
-﻿namespace ResourceManager.Api.Infrastructure.Repositories;
+﻿namespace ResourceManager.Infrastructure.Repositories;
 
 public class ConfigRepository
 {
