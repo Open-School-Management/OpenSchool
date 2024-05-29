@@ -6,15 +6,8 @@ using Serilog;
 
 namespace Identity.Infrastructure.Persistence;
 
-public class IdentityDbContextSeed
+public class IdentityDbContextSeed(IdentityDbContext context)
 {
-    private readonly IdentityDbContext _context;
-
-    public IdentityDbContextSeed(IdentityDbContext context)
-    {
-        _context = context;
-    }
-    
     /// <summary>
     /// Initialise database
     /// </summary>
@@ -22,8 +15,8 @@ public class IdentityDbContextSeed
     {
         try
         {
-            if (_context.Database.IsNpgsql())
-                await _context.Database.MigrateAsync();
+            if (context.Database.IsNpgsql())
+                await context.Database.MigrateAsync();
         }
         catch (Exception e)
         {
@@ -40,7 +33,7 @@ public class IdentityDbContextSeed
         try
         {
             await TrySeedAsync();
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
         catch (Exception e)
         {
@@ -61,15 +54,15 @@ public class IdentityDbContextSeed
         var permissions = Default.GetPermissions();
         
         // Seed permission
-        if (!_context.Permissions.Any())
+        if (!context.Permissions.Any())
         {
-            await _context.Permissions.AddRangeAsync(permissions); 
+            await context.Permissions.AddRangeAsync(permissions); 
         }
         
         // Seed role and assign permission for role
-        if (!_context.Roles.Any())
+        if (!context.Roles.Any())
         {
-            await _context.Roles.AddRangeAsync(roles);
+            await context.Roles.AddRangeAsync(roles);
             
             foreach (var permission in permissions)
             {
@@ -87,7 +80,7 @@ public class IdentityDbContextSeed
                     DeletedBy = null
                 };
             
-                await _context.RolePermissions.AddAsync(rp);
+                await context.RolePermissions.AddAsync(rp);
 
                 if (permission.Exponent <= (int)ActionExponent.Admin)
                 {
@@ -104,16 +97,16 @@ public class IdentityDbContextSeed
                         DeletedDate = null, 
                         DeletedBy = null
                     };
-                    await _context.RolePermissions.AddAsync(rp2);
+                    await context.RolePermissions.AddAsync(rp2);
                 }
             }
         }
         
         // Seed user and assign role, permission
-        if (!_context.Users.Any())
+        if (!context.Users.Any())
         {
-            await _context.Users.AddAsync(supperAdmin);
-            await _context.Users.AddAsync(admin);
+            await context.Users.AddAsync(supperAdmin);
+            await context.Users.AddAsync(admin);
 
             var supperAdminUserRole = new UserRole()
             {
@@ -142,7 +135,7 @@ public class IdentityDbContextSeed
                 DeletedDate = null,
                 DeletedBy = null
             };
-            await _context.UserRoles.AddRangeAsync(supperAdminUserRole, adminUserRole);
+            await context.UserRoles.AddRangeAsync(supperAdminUserRole, adminUserRole);
         }
         Log.Information("END: End seeding process for permissions, roles, and users. ");
     }
@@ -151,10 +144,10 @@ public class IdentityDbContextSeed
     {
         Log.Information("BEGIN-SyncPermissionsBasedOnChanges: Sync Permissions Based On Changes");
         
-        var supperAdmin = await _context.Users.SingleOrDefaultAsync(e => e.Email.Equals("devbe2002@gmail.com"));
-        var supperAdminRole = await _context.Roles.SingleOrDefaultAsync(r => r.Code == RoleConstant.SupperAdmin);
-        var adminRole = await _context.Roles.SingleOrDefaultAsync(r => r.Code == RoleConstant.Admin);
-        var currentPermissions = await _context.Permissions.ToListAsync();
+        var supperAdmin = await context.Users.SingleOrDefaultAsync(e => e.Email.Equals("devbe2002@gmail.com"));
+        var supperAdminRole = await context.Roles.SingleOrDefaultAsync(r => r.Code == RoleConstant.SupperAdmin);
+        var adminRole = await context.Roles.SingleOrDefaultAsync(r => r.Code == RoleConstant.Admin);
+        var currentPermissions = await context.Permissions.ToListAsync();
 
         var currentExponents = System.Enum.GetValues(typeof(ActionExponent)).Cast<ActionExponent>().ToList();
         var existingExponents = currentPermissions.Select(p => (ActionExponent)p.Exponent).ToList();
@@ -191,15 +184,15 @@ public class IdentityDbContextSeed
         if (permissionsToDelete.Any())
         {
             var permissionsToDeleteIds = permissionsToDelete.Select(p => p.Id).ToList();
-            var rolePermissionsToDelete = await _context.RolePermissions
+            var rolePermissionsToDelete = await context.RolePermissions
                 .Where(rp => permissionsToDeleteIds.Contains(rp.PermissionId))
                 .ToListAsync();
             
-            _context.RolePermissions.RemoveRange(rolePermissionsToDelete);
-            _context.Permissions.RemoveRange(permissionsToDelete);
+            context.RolePermissions.RemoveRange(rolePermissionsToDelete);
+            context.Permissions.RemoveRange(permissionsToDelete);
         };
         
-        if(permissionsToAdd.Any()) await _context.Permissions.AddRangeAsync(permissionsToAdd);
+        if(permissionsToAdd.Any()) await context.Permissions.AddRangeAsync(permissionsToAdd);
         
         foreach (var permission in permissionsToAdd)
         {
@@ -217,7 +210,7 @@ public class IdentityDbContextSeed
                 DeletedBy = null
             };
         
-            await _context.RolePermissions.AddAsync(rp);
+            await context.RolePermissions.AddAsync(rp);
 
             if (permission.Exponent <= (int)ActionExponent.Admin)
             {
@@ -234,11 +227,11 @@ public class IdentityDbContextSeed
                     DeletedDate = null, 
                     DeletedBy = null
                 };
-                await _context.RolePermissions.AddAsync(rp2);
+                await context.RolePermissions.AddAsync(rp2);
             }
         }
 
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         Log.Information("END-SyncPermissionsBasedOnChanges: Sync Permissions Based On Changes completed successfully.");
         
     }

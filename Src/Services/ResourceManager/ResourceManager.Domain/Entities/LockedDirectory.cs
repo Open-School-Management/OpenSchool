@@ -13,7 +13,6 @@ public class LockedDirectory : PersonalizedEntity
     public string Password { get; set; }
     
     #region Navigations
-    
     public virtual Directory Directory { get; set; }
     
     #endregion

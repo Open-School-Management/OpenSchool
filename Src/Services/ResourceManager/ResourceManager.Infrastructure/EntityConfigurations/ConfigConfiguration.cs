@@ -1,6 +1,12 @@
-﻿namespace ResourceManager.Infrastructure.EntityConfigurations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ResourceManager.Domain.Entities;
 
-public class ConfigConfiguration
+namespace ResourceManager.Infrastructure.EntityConfigurations;
+
+public class ConfigConfiguration : PersonalizedEntityTypeConfiguration<Config>
 {
-    
+    public override void Configure(EntityTypeBuilder<Config> builder)
+    {
+        base.Configure(builder);
+    }
 }

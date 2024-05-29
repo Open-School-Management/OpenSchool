@@ -1,6 +1,5 @@
 ﻿namespace ResourceManager.Infrastructure.Contexts;
 
-public class ResourceManagerDbContextSeed
+public class ResourceManagerDbContextSeed(ResourceManagerDbContext context)
 {
-    
 }

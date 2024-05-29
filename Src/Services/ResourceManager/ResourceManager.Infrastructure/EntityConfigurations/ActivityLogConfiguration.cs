@@ -1,6 +1,13 @@
-﻿namespace ResourceManager.Infrastructure.EntityConfigurations;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ResourceManager.Domain.Entities;
 
-public class ActivityLogConfiguration
+namespace ResourceManager.Infrastructure.EntityConfigurations;
+
+public class ActivityLogConfiguration : IEntityTypeConfiguration<ActivityLog>
 {
-    
+    public void Configure(EntityTypeBuilder<ActivityLog> builder)
+    {
+        
+    }
 }
