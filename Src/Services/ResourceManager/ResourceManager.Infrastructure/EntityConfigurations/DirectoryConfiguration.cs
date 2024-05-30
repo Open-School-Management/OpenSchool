@@ -42,5 +42,11 @@ public class DirectoryConfiguration : PersonalizedEntityTypeConfiguration<Direct
             .HasForeignKey(f => f.DirectoryId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(d => d.Shareds)
+            .WithOne(f => f.Directory)
+            .HasForeignKey(f => f.DirectoryId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

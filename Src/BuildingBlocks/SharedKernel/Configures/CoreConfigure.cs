@@ -131,22 +131,6 @@ public static partial class ConfigureExtension
 
     public static void UseCoreLocalization(this IApplicationBuilder app)
     {
-        //app.Use(async (context, next) =>
-        //{
-        //    var culture = context.Request.Headers[HeaderNames.AcceptLanguage].ToString();
-        //    switch (culture)
-        //    {
-        //        case "vi":
-        //            Thread.CurrentThread.CurrentCulture = new CultureInfo("vi-VN");
-        //            Thread.CurrentThread.CurrentUICulture = new CultureInfo("vi-VN");
-        //            break;
-        //        default:
-        //            break;
-        //    }
-
-        //    await next();
-        //});
-
         var supportedCultures = new List<CultureInfo> { new CultureInfo("en-US"), new CultureInfo("vi-VN") };
         app.UseRequestLocalization(new RequestLocalizationOptions
         {

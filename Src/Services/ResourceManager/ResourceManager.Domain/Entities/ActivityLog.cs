@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using ResourceManager.Domain.Enums;
+using SharedKernel.Domain;
 
 namespace ResourceManager.Domain.Entities;
 
 [Table("activity_log")]
-public class ActivityLog
+public class ActivityLog : EntityBase
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }

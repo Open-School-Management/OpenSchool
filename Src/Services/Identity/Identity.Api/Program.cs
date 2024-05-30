@@ -20,7 +20,7 @@ var configuration = builder.Configuration;
 
 try
 {
-    builder.AddCoreWebApplication();
+    builder.ConfigureCoreServices();
     
     // Core setting project
     CoreSettings.SetJWTConfig(configuration);

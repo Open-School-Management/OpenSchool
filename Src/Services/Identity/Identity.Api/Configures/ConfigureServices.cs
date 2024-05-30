@@ -70,28 +70,19 @@ public static class ConfigureServices
         // Customise default API behaviour
         services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
-
-        // Api Versioning
-        services.AddApiVersioning(configuration);
         
         #endregion
         
         return services;
     }
 
-    public static IServiceCollection AddApiVersioning(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDefaultOpenApi(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddApiVersioning(options =>
-        {
-            options.ReportApiVersions = true;
-        });
+        services.AddEndpointsApiExplorer();
         
-        services.AddVersionedApiExplorer(
-            options =>
-            {
-                options.GroupNameFormat = "'v'VVV";
-                options.SubstituteApiVersionInUrl = true;
-            });
+        var withApiVersioning = services.AddApiVersioning();
+        
+        withApiVersioning.AddApiExplorer(options => options.GroupNameFormat = "'v'VVV");
         
         services.AddSwaggerGen(c =>
         {

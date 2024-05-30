@@ -22,6 +22,8 @@ public class Directory : PersonalizedEntity
     
     public ICollection<File>? Files { get; set; }
     
+    public ICollection<Shared>? Shareds { get; set; }
+    
     #endregion
 }
 

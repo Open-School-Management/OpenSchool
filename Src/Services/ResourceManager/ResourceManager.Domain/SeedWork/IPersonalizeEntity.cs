@@ -2,5 +2,5 @@
 
 public interface IPersonalizeEntity 
 {
-    Guid? OwnerId { get; set; }
+    string OwnerId { get; set; }
 }

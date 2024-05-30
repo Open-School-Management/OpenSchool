@@ -4,7 +4,7 @@ namespace Identity.Api.Configures;
 
 public static class Configuration
 {
-    public static WebApplicationBuilder AddCoreWebApplication(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder ConfigureCoreServices(this WebApplicationBuilder builder)
     {
         // add app settings
         builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);

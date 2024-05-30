@@ -13,8 +13,6 @@
         <PackageReference Include="Ocelot" Version="16.0.0" />
         <PackageReference Include="Otp.NET" Version="1.4.0" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
     </ItemGroup>
 
     <ItemGroup>

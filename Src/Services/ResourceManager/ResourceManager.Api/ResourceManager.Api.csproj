@@ -7,16 +7,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
+        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Apis\" />
       <Folder Include="Application\Commands\Auth\" />
       <Folder Include="Application\Commands\Config\" />
       <Folder Include="Application\Commands\File\" />
       <Folder Include="Application\Commands\RecycleBin\" />
+      <Folder Include="Application\Commands\Shard\" />
       <Folder Include="Application\DomainEventHandlers\" />
       <Folder Include="Application\IntegrationEvents\" />
       <Folder Include="Application\Models\" />

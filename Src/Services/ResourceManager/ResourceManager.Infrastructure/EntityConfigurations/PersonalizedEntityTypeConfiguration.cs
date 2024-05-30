@@ -37,6 +37,6 @@ public class PersonalizedEntityTypeConfiguration<TEntity> : IEntityTypeConfigura
 
         builder
             .Property(e => e.OwnerId)
-            .IsRequired(false);
+            .IsRequired();
     }
 }

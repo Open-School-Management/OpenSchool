@@ -5,7 +5,7 @@ using ResourceManager.Domain.SeedWork;
 
 namespace ResourceManager.Domain.Entities;
 
-[Table("recycle_Bin")]
+[Table("recycle_bin")]
 public class RecycleBin : PersonalizedEntity
 {
     public Guid ResourceId { get; set; }

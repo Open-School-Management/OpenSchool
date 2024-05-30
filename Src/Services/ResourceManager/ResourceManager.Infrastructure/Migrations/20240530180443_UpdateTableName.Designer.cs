@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResourceManager.Infrastructure.Contexts;
 
@@ -10,9 +11,11 @@ using ResourceManager.Infrastructure.Contexts;
 namespace ResourceManager.Infrastructure.Migrations
 {
     [DbContext(typeof(ResourceManagerDbContext))]
-    partial class ResourceManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240530180443_UpdateTableName")]
+    partial class UpdateTableName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

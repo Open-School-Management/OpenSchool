@@ -26,8 +26,6 @@ public static class ConfigureApplications
         {
             endpoints.MapControllers();
         });
-        
-        //app.UseCoreHealthChecks();
     }
     public static void UseSwaggerVersioning(this IApplicationBuilder app)
     {
